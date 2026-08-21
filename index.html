@@ -38,7 +38,7 @@
       overflow: hidden;
     }
 
-    /* Screen Views - Responsive Full Viewport Container */
+    /* Screen Views */
     .screen-view {
       width: 100%;
       height: 100%;
@@ -56,7 +56,7 @@
       display: flex !important;
     }
 
-    /* Faction Color Palettes */
+    /* Faction Color Themes */
     .theme-blood_angels {
       --f-primary: #b81424;
       --f-accent: #e6b832;
@@ -85,7 +85,7 @@
     }
 
     /* ==========================================================
-       SCREEN 1: FACTION SELECT (Scrollable, Responsive)
+       SCREEN 1: FACTION SELECT
        ========================================================== */
     #screenFactionSelect {
       background: radial-gradient(circle at 50% 30%, #1c1c2b 0%, #09090e 100%);
@@ -98,7 +98,7 @@
 
     .faction-select-title {
       text-align: center;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       flex-shrink: 0;
     }
     .faction-select-title h1 {
@@ -114,7 +114,6 @@
       margin-top: 4px;
     }
 
-    /* Direct Rules Button on Faction Select Screen */
     .rules-direct-btn-container {
       margin-bottom: 20px;
       display: flex;
@@ -136,10 +135,9 @@
       transition: all 0.2s ease;
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
     }
-    .btn-view-rules-direct:hover, .btn-view-rules-direct:active {
+    .btn-view-rules-direct:active {
       background: var(--gold);
       color: #121218;
-      box-shadow: 0 0 16px rgba(230, 184, 50, 0.6);
     }
 
     .faction-cards-grid {
@@ -155,7 +153,7 @@
     .faction-card-btn {
       flex: 1 1 240px;
       max-width: 280px;
-      min-height: 260px;
+      min-height: 250px;
       background: #181824;
       border: 2px solid #333348;
       border-radius: 16px;
@@ -168,9 +166,8 @@
       transition: all 0.2s ease;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
     }
-
-    .faction-card-btn:hover, .faction-card-btn:active {
-      transform: translateY(-4px);
+    .faction-card-btn:active {
+      transform: translateY(-3px);
       box-shadow: 0 14px 30px rgba(0, 0, 0, 0.85);
     }
 
@@ -178,29 +175,23 @@
       background: linear-gradient(180deg, #280e14 0%, #140508 100%);
       border-color: #8a1723;
     }
-    .faction-card-btn.ba:hover {
-      border-color: #ff3b4e;
-    }
+    .faction-card-btn.ba:hover { border-color: #ff3b4e; }
 
     .faction-card-btn.orks {
       background: linear-gradient(180deg, #122915 0%, #071609 100%);
       border-color: #276e27;
     }
-    .faction-card-btn.orks:hover {
-      border-color: #4cd964;
-    }
+    .faction-card-btn.orks:hover { border-color: #4cd964; }
 
     .faction-card-btn.custodes {
       background: linear-gradient(180deg, #2a220e 0%, #151006 100%);
       border-color: #9c7b1c;
     }
-    .faction-card-btn.custodes:hover {
-      border-color: #ffd700;
-    }
+    .faction-card-btn.custodes:hover { border-color: #ffd700; }
 
     .faction-card-icon-container {
-      width: 90px;
-      height: 90px;
+      width: 80px;
+      height: 80px;
       margin-bottom: 12px;
       display: flex;
       align-items: center;
@@ -233,7 +224,7 @@
       line-height: 1.35;
     }
 
-    /* Modal Popups */
+    /* Modals */
     .modal-backdrop {
       position: fixed;
       top: 0;
@@ -347,7 +338,6 @@
       margin-top: 6px;
     }
 
-    /* Point Cap Selection */
     .pts-btn-row {
       display: flex;
       gap: 12px;
@@ -392,7 +382,7 @@
        SCREEN 2: ARMY CREATION / ROSTER BUILDER
        ========================================================== */
     #screenArmyBuilder {
-      padding: 12px 16px;
+      padding: 10px 14px;
       background: var(--bg-dark);
     }
 
@@ -402,15 +392,15 @@
       align-items: center;
       background: var(--panel-bg);
       border: 1px solid var(--border-dark);
-      padding: 8px 14px;
+      padding: 8px 12px;
       border-radius: 12px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       flex-shrink: 0;
       gap: 8px;
     }
 
     .builder-faction-info h2 {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 900;
       color: var(--gold);
       text-transform: uppercase;
@@ -436,7 +426,7 @@
       background: linear-gradient(135deg, var(--green), #4cd964);
       color: #fff;
       border: none;
-      padding: 9px 15px;
+      padding: 8px 15px;
       border-radius: 8px;
       font-size: 13px;
       font-weight: 900;
@@ -460,9 +450,10 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      padding-right: 4px;
+      padding-right: 2px;
     }
 
+    /* Fixed Row Card in Builder */
     .builder-unit-card {
       background: var(--card-bg);
       border: 1.5px solid var(--border-dark);
@@ -472,18 +463,16 @@
       flex-direction: row;
       align-items: stretch;
       overflow: hidden;
-      min-height: 96px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      min-height: 90px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
       box-sizing: border-box;
     }
 
-    .builder-portrait-box {
+    .builder-portrait-col {
       flex: 0 0 85px;
       width: 85px;
       min-width: 85px;
       max-width: 85px;
-      height: 100%;
-      min-height: 96px;
       background: #0a0a10;
       border-right: 2px solid var(--gold);
       overflow: hidden;
@@ -493,58 +482,58 @@
       justify-content: center;
       flex-shrink: 0;
     }
-    .builder-portrait-box img {
-      position: absolute;
-      top: 0;
-      left: 0;
+    .builder-portrait-col img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       object-position: center 20%;
       display: block;
     }
-    .builder-portrait-box svg {
-      width: 65%;
-      height: 65%;
+    .builder-portrait-col svg {
+      width: 70%;
+      height: 70%;
       object-fit: contain;
     }
 
-    .builder-card-body {
-      flex: 1 1 auto;
+    .builder-info-col {
+      flex: 1;
       min-width: 0;
+      padding: 8px 10px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 12px;
-      gap: 8px;
+      flex-direction: column;
+      justify-content: center;
+      gap: 3px;
       overflow: hidden;
       box-sizing: border-box;
     }
 
-    .builder-unit-details {
-      flex: 1 1 auto;
-      min-width: 0;
+    .builder-info-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .builder-title-block {
+      flex: 1;
       overflow: hidden;
     }
-    .builder-unit-details h4 {
+    .builder-title-block h4 {
       font-size: 13.5px;
       font-weight: 800;
       color: #fff;
-      margin-bottom: 2px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .builder-unit-details .unit-role {
+    .builder-title-block .unit-role {
       font-size: 10.5px;
       color: var(--gold);
       font-weight: 600;
-      margin-bottom: 2px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .builder-unit-details .unit-stats-summary {
+    .builder-stats-line {
       font-size: 10px;
       color: var(--text-muted);
       white-space: nowrap;
@@ -552,50 +541,42 @@
       text-overflow: ellipsis;
     }
 
-    .builder-card-right {
+    .builder-actions-col {
+      flex: 0 0 85px;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 8px;
+      border-left: 1px solid rgba(255, 255, 255, 0.06);
     }
-
     .unit-cost-tag {
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 800;
       color: var(--gold);
-      background: rgba(0, 0, 0, 0.4);
-      padding: 5px 8px;
-      border-radius: 6px;
-      border: 1px solid #444;
-      min-width: 54px;
-      text-align: center;
     }
-
     .builder-count-controls {
       display: flex;
       align-items: center;
       gap: 5px;
     }
     .btn-count-adjust {
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
       border-radius: 7px;
       border: none;
       background: #333346;
       color: #fff;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: bold;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .btn-count-adjust.add {
-      background: var(--green);
-    }
-    .btn-count-adjust.remove {
-      background: var(--red);
-    }
+    .btn-count-adjust.add { background: var(--green); }
+    .btn-count-adjust.remove { background: var(--red); }
     .selected-unit-count {
       font-size: 14px;
       font-weight: 800;
@@ -605,25 +586,17 @@
     }
 
     /* ==========================================================
-       SCREEN 3: RESPONSIVE GAMEPLAY TRACKER (Portrait & Landscape)
+       SCREEN 3: RESPONSIVE GAMEPLAY TRACKER
        ========================================================== */
     #screenGameplay {
       padding: 8px 10px;
       gap: 8px;
       background: var(--bg-dark);
     }
+    #screenGameplay.theme-blood_angels { background: var(--f-bg-radial); }
+    #screenGameplay.theme-orks { background: var(--f-bg-radial); }
+    #screenGameplay.theme-custodes { background: var(--f-bg-radial); }
 
-    #screenGameplay.theme-blood_angels {
-      background: var(--f-bg-radial);
-    }
-    #screenGameplay.theme-orks {
-      background: var(--f-bg-radial);
-    }
-    #screenGameplay.theme-custodes {
-      background: var(--f-bg-radial);
-    }
-
-    /* Responsive Top Bar */
     .gameplay-top-bar {
       display: flex;
       flex-wrap: wrap;
@@ -645,7 +618,6 @@
       gap: 8px;
       flex-wrap: wrap;
     }
-
     .gameplay-faction-title {
       font-size: 13.5px;
       font-weight: 900;
@@ -653,7 +625,6 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-
     .gameplay-vp-box {
       display: flex;
       align-items: center;
@@ -708,14 +679,12 @@
       white-space: nowrap;
     }
 
-    /* Marker Toolbar */
     .marker-toolbar {
       display: flex;
       align-items: center;
       gap: 4px;
       flex-wrap: wrap;
     }
-
     .marker-tool-btn {
       background: rgba(255, 255, 255, 0.07);
       border: 1.5px solid #444455;
@@ -731,39 +700,12 @@
       transition: all 0.15s ease;
       white-space: nowrap;
     }
+    .marker-tool-btn.active-aim { background: #b8860b; border-color: #ffd700; color: #fff; box-shadow: 0 0 10px #ffd700; }
+    .marker-tool-btn.active-overwatch { background: #0056b3; border-color: #3399ff; color: #fff; box-shadow: 0 0 10px #3399ff; }
+    .marker-tool-btn.active-exhaust { background: #616161; border-color: #9e9e9e; color: #fff; box-shadow: 0 0 10px #9e9e9e; }
+    .marker-tool-btn.active-wound { background: #b71c1c; border-color: #ff5252; color: #fff; box-shadow: 0 0 10px #ff5252; }
+    .marker-tool-btn.active-heal { background: #1b5e20; border-color: #69f0ae; color: #fff; box-shadow: 0 0 10px #69f0ae; }
 
-    .marker-tool-btn.active-aim {
-      background: #b8860b;
-      border-color: #ffd700;
-      color: #fff;
-      box-shadow: 0 0 10px #ffd700;
-    }
-    .marker-tool-btn.active-overwatch {
-      background: #0056b3;
-      border-color: #3399ff;
-      color: #fff;
-      box-shadow: 0 0 10px #3399ff;
-    }
-    .marker-tool-btn.active-exhaust {
-      background: #616161;
-      border-color: #9e9e9e;
-      color: #fff;
-      box-shadow: 0 0 10px #9e9e9e;
-    }
-    .marker-tool-btn.active-wound {
-      background: #b71c1c;
-      border-color: #ff5252;
-      color: #fff;
-      box-shadow: 0 0 10px #ff5252;
-    }
-    .marker-tool-btn.active-heal {
-      background: #1b5e20;
-      border-color: #69f0ae;
-      color: #fff;
-      box-shadow: 0 0 10px #69f0ae;
-    }
-
-    /* Armed Tool Banner */
     .armed-tool-banner {
       background: rgba(0, 0, 0, 0.7);
       border: 1px dashed var(--gold);
@@ -777,21 +719,19 @@
       justify-content: space-between;
       flex-shrink: 0;
     }
-    .armed-tool-banner.active {
-      display: flex;
-    }
+    .armed-tool-banner.active { display: flex; }
 
-    /* Responsive Gameplay Roster Grid */
     .gameplay-roster-grid {
       flex: 1;
       overflow-y: auto !important;
       -webkit-overflow-scrolling: touch;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 10px;
       padding-right: 2px;
     }
 
+    /* Fixed Row Card in Gameplay */
     .roster-live-card {
       background: var(--f-card, var(--card-bg));
       border: 2px solid var(--f-border, var(--border-dark));
@@ -803,38 +743,22 @@
       position: relative;
       cursor: pointer;
       transition: transform 0.15s ease, border-color 0.15s ease;
-      min-height: 130px;
+      min-height: 125px;
       height: 135px;
       overflow: hidden;
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
       box-sizing: border-box;
     }
-    .roster-live-card:hover {
-      border-color: var(--f-accent, var(--gold));
-    }
-    .roster-live-card:active {
-      transform: scale(0.98);
-    }
+    .roster-live-card:hover { border-color: var(--f-accent, var(--gold)); }
+    .roster-live-card:active { transform: scale(0.98); }
+    .roster-live-card.exhausted { opacity: 0.48; filter: grayscale(0.7); border-color: #555; }
+    .roster-live-card.dead { opacity: 0.25; filter: grayscale(1); border-color: #333; text-decoration: line-through; pointer-events: none; }
 
-    .roster-live-card.exhausted {
-      opacity: 0.48;
-      filter: grayscale(0.7);
-      border-color: #555;
-    }
-    .roster-live-card.dead {
-      opacity: 0.25;
-      filter: grayscale(1);
-      border-color: #333;
-      text-decoration: line-through;
-      pointer-events: none;
-    }
-
-    /* Full-Height Left Portrait Column with Strict Image Containment */
-    .live-card-portrait-full {
-      flex: 0 0 92px;
-      width: 92px;
-      min-width: 92px;
-      max-width: 92px;
+    .live-card-portrait-col {
+      flex: 0 0 95px;
+      width: 95px;
+      min-width: 95px;
+      max-width: 95px;
       height: 100%;
       background: #09090e;
       border-right: 2px solid var(--f-border, var(--gold));
@@ -845,25 +769,21 @@
       justify-content: center;
       flex-shrink: 0;
     }
-    .live-card-portrait-full img {
-      position: absolute;
-      top: 0;
-      left: 0;
+    .live-card-portrait-col img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center 15%;
+      object-position: center 20%;
       display: block;
     }
-    .live-card-portrait-full svg {
-      width: 65%;
-      height: 65%;
+    .live-card-portrait-col svg {
+      width: 70%;
+      height: 70%;
       object-fit: contain;
     }
 
-    /* Right Column: All Content, Stats, HP, Tokens */
-    .live-card-content-right {
-      flex: 1 1 auto;
+    .live-card-details-col {
+      flex: 1;
       min-width: 0;
       padding: 6px 10px;
       display: flex;
@@ -874,13 +794,13 @@
       box-sizing: border-box;
     }
 
-    .live-card-header-row {
+    .live-details-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 6px;
+      gap: 4px;
     }
-    .live-card-name {
+    .live-unit-name {
       font-size: 13.5px;
       font-weight: 900;
       color: #fff;
@@ -888,41 +808,29 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .live-card-role {
-      font-size: 10px;
+    .live-unit-pts {
+      font-size: 11px;
       color: var(--f-accent, var(--gold));
-      font-weight: 700;
+      font-weight: 800;
       white-space: nowrap;
     }
 
-    /* Live Stat Bar */
-    .live-stats-row {
+    .live-stats-pills-row {
       display: flex;
       gap: 4px;
-      margin-top: 6px;
     }
-    .live-stat-pill {
+    .live-pill {
       flex: 1;
       background: rgba(0, 0, 0, 0.4);
       border: 1px solid var(--f-border, #444);
-      border-radius: 6px;
-      padding: 2px 3px;
+      border-radius: 5px;
+      padding: 2px 2px;
       text-align: center;
     }
-    .live-stat-pill .lbl {
-      font-size: 7.5px;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-    .live-stat-pill .val {
-      font-size: 10.5px;
-      font-weight: 800;
-      color: #fff;
-    }
+    .live-pill .lbl { font-size: 7.5px; font-weight: 700; color: var(--text-muted); display: block; }
+    .live-pill .val { font-size: 10.5px; font-weight: 800; color: #fff; display: block; }
 
-    /* Live HP Progress Bar */
-    .live-hp-container {
-      margin-top: 6px;
+    .live-hp-track {
       background: rgba(0, 0, 0, 0.6);
       border-radius: 6px;
       height: 15px;
@@ -932,12 +840,12 @@
       display: flex;
       align-items: center;
     }
-    .live-hp-fill {
+    .live-hp-track-fill {
       height: 100%;
       background: linear-gradient(90deg, #b81424, #28a745);
       transition: width 0.3s ease;
     }
-    .live-hp-text {
+    .live-hp-track-text {
       position: absolute;
       width: 100%;
       text-align: center;
@@ -947,51 +855,30 @@
       text-shadow: 0 0 4px #000;
     }
 
-    /* Applied Tokens Area */
-    .live-applied-tokens {
+    .live-token-chips-row {
       display: flex;
-      gap: 5px;
-      margin-top: 6px;
+      gap: 4px;
       flex-wrap: wrap;
-      min-height: 20px;
+      min-height: 18px;
       align-items: center;
     }
-
     .token-chip {
-      font-size: 9px;
+      font-size: 8.5px;
       font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 5px;
+      padding: 1px 5px;
+      border-radius: 4px;
       text-transform: uppercase;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
       cursor: pointer;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
     }
-    .token-chip .del-x {
-      font-size: 10px;
-      opacity: 0.7;
-    }
-    .token-chip.aim {
-      background: #b8860b;
-      color: #fff;
-      border: 1px solid #ffd700;
-    }
-    .token-chip.overwatch {
-      background: #0056b3;
-      color: #fff;
-      border: 1px solid #3399ff;
-    }
-    .token-chip.exhausted {
-      background: #555;
-      color: #ddd;
-      border: 1px solid #888;
-    }
-    .token-chip.dead {
-      background: #771111;
-      color: #ff9999;
-    }
+    .token-chip .del-x { font-size: 9px; opacity: 0.7; }
+    .token-chip.aim { background: #b8860b; color: #fff; border: 1px solid #ffd700; }
+    .token-chip.overwatch { background: #0056b3; color: #fff; border: 1px solid #3399ff; }
+    .token-chip.exhausted { background: #555; color: #ddd; border: 1px solid #888; }
+    .token-chip.dead { background: #771111; color: #ff9999; }
 
     /* Statcard Modal */
     .statcard-view-modal {
@@ -1008,7 +895,6 @@
       flex-direction: column;
       gap: 10px;
     }
-
     .weapon-table-box {
       background: rgba(0, 0, 0, 0.35);
       border-radius: 8px;
@@ -1019,9 +905,7 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       padding: 5px 0;
     }
-    .weapon-entry:last-child {
-      border-bottom: none;
-    }
+    .weapon-entry:last-child { border-bottom: none; }
     .weapon-head {
       display: flex;
       justify-content: space-between;
@@ -1029,12 +913,7 @@
       color: #fff;
       font-size: 12px;
     }
-    .weapon-sub {
-      font-size: 10.5px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
+    .weapon-sub { font-size: 10.5px; color: var(--text-muted); margin-top: 2px; }
     .rule-entry {
       background: rgba(255, 255, 255, 0.04);
       border-radius: 6px;
@@ -1043,9 +922,7 @@
       font-size: 11.5px;
       color: #ddd;
     }
-    .rule-entry strong {
-      color: var(--f-accent, var(--gold));
-    }
+    .rule-entry strong { color: var(--f-accent, var(--gold)); }
   </style>
 </head>
 <body>
@@ -1057,7 +934,6 @@
       <p>Single-Player Tablet & Mobile Companion</p>
     </div>
 
-    <!-- Direct Rules Button -->
     <div class="rules-direct-btn-container">
       <button class="btn-view-rules-direct" onclick="openRulesModal()">
         📖 VIEW GAME RULES & REFERENCE
@@ -1516,10 +1392,8 @@
       closeModal('modalPointsSelect');
       appState.draftRoster = [];
 
-      // Set Faction Name
       document.getElementById('builderFactionName').innerText = FACTION_DATA[appState.selectedFactionKey].name.toUpperCase();
       
-      // Render Sorted Units (Highest to Lowest Points)
       renderArmyBuilder();
       updateBuilderBudget();
 
@@ -1533,33 +1407,53 @@
     /* ---------------- SCREEN 2: ARMY BUILDER LOGIC ---------------- */
     function renderArmyBuilder() {
       const units = [...UNIT_DB[appState.selectedFactionKey]];
-      // Sort highest to lowest point value
       units.sort((a, b) => b.cost - a.cost);
 
       const listEl = document.getElementById('builderUnitsList');
-      listEl.innerHTML = units.map(u => `
-        <div class="builder-unit-card">
-          <div class="builder-card-left">
-            <div class="builder-portrait-box">
+      
+      let html = units.map(u => {
+        const draftedUnits = appState.draftRoster.filter(item => item.id === u.id);
+        const count = draftedUnits.length;
+
+        return `
+          <div class="builder-unit-card">
+            <div class="builder-portrait-col">
               ${getPortraitHTML(u)}
             </div>
-            <div class="builder-unit-details">
-              <h4>${u.name}</h4>
-              <div class="unit-role">${u.subtitle}</div>
-              <div class="unit-stats-summary">Move ${u.move} • ${u.hp} HP • Def ${u.def} (${u.save} Sv)</div>
+            <div class="builder-info-col">
+              <div class="builder-info-top">
+                <div class="builder-title-block">
+                  <h4>${u.name}</h4>
+                  <div class="unit-role">${u.subtitle}</div>
+                </div>
+              </div>
+              <div class="builder-stats-line">Move ${u.move} • ${u.hp} HP • Def ${u.def} (${u.save} Sv)</div>
+              ${count > 0 ? `
+                <div style="margin-top: 4px; display: flex; gap: 5px; flex-wrap: wrap;">
+                  ${draftedUnits.map((inst, i) => `
+                    <div style="background: rgba(0,0,0,0.5); border: 1px solid var(--gold); border-radius: 5px; padding: 2px 5px; display: flex; align-items: center; gap: 4px; font-size: 10px;">
+                      <span style="color: #fff; font-weight: bold;">#${i+1}: ${inst.hp} HP</span>
+                      <button style="background: var(--red); color: #fff; border: none; border-radius: 3px; padding: 1px 4px; font-weight: bold; cursor: pointer;" onclick="adjustUnitHpUpgrade('${inst.instId}', -1)" ${inst.hpUpgrade > 0 ? '' : 'disabled'}>-HP</button>
+                      <span style="color: var(--gold); font-weight: 800;">+${inst.hpUpgrade || 0}</span>
+                      <button style="background: var(--green); color: #fff; border: none; border-radius: 3px; padding: 1px 4px; font-weight: bold; cursor: pointer;" onclick="adjustUnitHpUpgrade('${inst.instId}', 1)">+1 HP</button>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+            </div>
+            <div class="builder-actions-col">
+              <div class="unit-cost-tag">${u.cost} PTS</div>
+              <div class="builder-count-controls">
+                <button class="btn-count-adjust remove" onclick="adjustUnitCount('${u.id}', -1)">-</button>
+                <span class="selected-unit-count" id="count_${u.id}">${count}</span>
+                <button class="btn-count-adjust add" onclick="adjustUnitCount('${u.id}', 1)">+</button>
+              </div>
             </div>
           </div>
-          <div class="builder-card-right">
-            <div class="unit-cost-tag">${u.cost} PTS</div>
-            <div class="builder-count-controls">
-              <button class="btn-count-adjust remove" onclick="adjustUnitCount('${u.id}', -1)">-</button>
-              <span class="selected-unit-count" id="count_${u.id}">0</span>
-              <button class="btn-count-adjust add" onclick="adjustUnitCount('${u.id}', 1)">+</button>
-            </div>
-          </div>
-        </div>
-      `).join('');
-      updateUnitCountDisplays();
+        `;
+      }).join('');
+
+      listEl.innerHTML = html;
     }
 
     function adjustUnitCount(unitId, delta) {
@@ -1571,7 +1465,6 @@
           alert(`Cannot add ${unit.name}! That would exceed your ${appState.pointBudget} point budget.`);
           return;
         }
-        // Clone instance with unique runtime ID
         const inst = JSON.parse(JSON.stringify(unit));
         inst.instId = 'u_' + Math.random().toString(36).substr(2, 9);
         inst.baseHp = unit.hp;
@@ -1620,10 +1513,6 @@
       return appState.draftRoster.reduce((sum, item) => sum + item.cost + (item.hpUpgrade || 0), 0);
     }
 
-    function updateUnitCountDisplays() {
-      // Kept for backward compatibility
-    }
-
     function updateBuilderBudget() {
       const totalPts = calculateTotalDraftPoints();
       document.getElementById('builderPtsDisplay').innerText = `${totalPts} / ${appState.pointBudget} PTS`;
@@ -1639,7 +1528,6 @@
 
       const totalSpent = calculateTotalDraftPoints();
 
-      // Apply Faction Theme
       const gpScreen = document.getElementById('screenGameplay');
       gpScreen.className = `screen-view active theme-${appState.selectedFactionKey}`;
       document.getElementById('gameplayFactionTitle').innerText = `${FACTION_DATA[appState.selectedFactionKey].name.toUpperCase()} • ${totalSpent}/${appState.pointBudget} PTS`;
@@ -1670,36 +1558,39 @@
                onclick="handleCardClick(${idx})" 
                oncontextmenu="handleLongPress(event, ${idx})">
             
-            <div class="live-card-header">
-              <div class="live-portrait-thumb">
-                ${getPortraitHTML(u)}
+            <!-- Left Full Height Portrait -->
+            <div class="live-card-portrait-col">
+              ${getPortraitHTML(u)}
+            </div>
+
+            <!-- Right Column Details -->
+            <div class="live-card-details-col">
+              <div class="live-details-top">
+                <div class="live-unit-name">${u.name}</div>
+                <div class="live-unit-pts">${u.cost + (u.hpUpgrade || 0)} PTS</div>
               </div>
-              <div class="live-card-info">
-                <div class="live-card-name">${u.name}</div>
-                <div class="live-card-role">${u.cost} PTS • ${u.subtitle}</div>
+
+              <!-- Stats Row -->
+              <div class="live-stats-pills-row">
+                <div class="live-pill"><span class="lbl">MOVE</span><span class="val">${u.move}</span></div>
+                <div class="live-pill"><span class="lbl">DEF</span><span class="val">${u.def}</span></div>
+                <div class="live-pill"><span class="lbl">MEL</span><span class="val">${u.melee.split(' ')[0]}</span></div>
+                <div class="live-pill"><span class="lbl">RNG</span><span class="val">${u.ranged.split(' ')[0]}</span></div>
               </div>
-            </div>
 
-            <!-- Stats Bar -->
-            <div class="live-stats-row">
-              <div class="live-stat-pill"><div class="lbl">MOVE</div><div class="val">${u.move}</div></div>
-              <div class="live-stat-pill"><div class="lbl">DEFENSE</div><div class="val">${u.def} (${u.save})</div></div>
-              <div class="live-stat-pill"><div class="lbl">MELEE</div><div class="val">${u.melee.split(' ')[0]}</div></div>
-              <div class="live-stat-pill"><div class="lbl">RANGED</div><div class="val">${u.ranged.split(' ')[0]}</div></div>
-            </div>
+              <!-- HP Track -->
+              <div class="live-hp-track">
+                <div class="live-hp-track-fill" style="width: ${hpPct}%;"></div>
+                <span class="live-hp-track-text">${u.currentHp} / ${u.hp} HP</span>
+              </div>
 
-            <!-- HP Bar -->
-            <div class="live-hp-container">
-              <div class="live-hp-fill" style="width: ${hpPct}%;"></div>
-              <span class="live-hp-text">${u.currentHp} / ${u.hp} HP</span>
-            </div>
-
-            <!-- Active Tokens Area -->
-            <div class="live-applied-tokens">
-              ${u.isDead ? '<span class="token-chip dead">💀 DEAD</span>' : ''}
-              ${u.isExhausted && !u.isDead ? `<span class="token-chip exhausted" onclick="event.stopPropagation(); removeToken(${idx}, 'isExhausted')">⏳ EXHAUSTED <span class="del-x">✕</span></span>` : ''}
-              ${u.hasAim && !u.isDead ? `<span class="token-chip aim" onclick="event.stopPropagation(); removeToken(${idx}, 'hasAim')">🎯 AIM <span class="del-x">✕</span></span>` : ''}
-              ${u.hasOverwatch && !u.isDead ? `<span class="token-chip overwatch" onclick="event.stopPropagation(); removeToken(${idx}, 'hasOverwatch')">🛡️ OVERWATCH <span class="del-x">✕</span></span>` : ''}
+              <!-- Tokens -->
+              <div class="live-token-chips-row">
+                ${u.isDead ? '<span class="token-chip dead">💀 DEAD</span>' : ''}
+                ${u.isExhausted && !u.isDead ? `<span class="token-chip exhausted" onclick="event.stopPropagation(); removeToken(${idx}, 'isExhausted')">⏳ EXHAUSTED <span class="del-x">✕</span></span>` : ''}
+                ${u.hasAim && !u.isDead ? `<span class="token-chip aim" onclick="event.stopPropagation(); removeToken(${idx}, 'hasAim')">🎯 AIM <span class="del-x">✕</span></span>` : ''}
+                ${u.hasOverwatch && !u.isDead ? `<span class="token-chip overwatch" onclick="event.stopPropagation(); removeToken(${idx}, 'hasOverwatch')">🛡️ OVERWATCH <span class="del-x">✕</span></span>` : ''}
+              </div>
             </div>
           </div>
         `;
@@ -1708,7 +1599,6 @@
       attachLongPressHandlers();
     }
 
-    /* Long-Press Support for Touch Tablets */
     function attachLongPressHandlers() {
       appState.deployedRoster.forEach((u, idx) => {
         const el = document.getElementById(`card_${u.instId}`);
@@ -1730,7 +1620,6 @@
       openStatcardModal(idx);
     }
 
-    /* Tool Arming & Marker Application */
     function armTool(toolName) {
       if (appState.armedTool === toolName) {
         disarmTool();
@@ -1738,7 +1627,6 @@
       }
       appState.armedTool = toolName;
       
-      // Update Button Highlight Classes
       ['aim', 'overwatch', 'exhaust', 'wound', 'heal'].forEach(t => {
         const btn = document.getElementById(`tool${t.charAt(0).toUpperCase() + t.slice(1)}`);
         if (btn) btn.className = `marker-tool-btn ${appState.armedTool === t ? 'active-' + t : ''}`;
@@ -1764,12 +1652,10 @@
       if (!unit) return;
 
       if (!appState.armedTool) {
-        // If no tool is armed, tap opens the Full Statcard Modal!
         openStatcardModal(unitIdx);
         return;
       }
 
-      // Apply the armed tool effect
       if (appState.armedTool === 'aim') {
         unit.hasAim = !unit.hasAim;
       } else if (appState.armedTool === 'overwatch') {
@@ -1810,16 +1696,21 @@
       document.getElementById('gameplayVP').innerText = appState.victoryPoints;
     }
 
-    /* ---------------- STATCARD INSPECTION MODAL ---------------- */
+    /* ---------------- STATCARD MODAL ---------------- */
     function openStatcardModal(unitIdx) {
       const unit = appState.deployedRoster[unitIdx];
       const box = document.getElementById('statcardModalContent');
 
       box.innerHTML = `
         <div class="modal-header-row">
-          <div>
-            <h2 style="font-size: 18px; color: #fff;">${unit.name}</h2>
-            <span style="font-size: 12px; color: var(--gold); font-weight: bold;">${unit.cost} PTS • ${unit.subtitle}</span>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <div style="width: 65px; height: 65px; border-radius: 8px; border: 2px solid var(--gold); overflow: hidden; background: #000; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              ${getPortraitHTML(unit)}
+            </div>
+            <div>
+              <h2 style="font-size: 18px; color: #fff; font-weight: 900;">${unit.name}</h2>
+              <span style="font-size: 11.5px; color: var(--gold); font-weight: 800;">${unit.cost + (unit.hpUpgrade || 0)} PTS • ${unit.subtitle}</span>
+            </div>
           </div>
           <button class="btn-close-modal" onclick="closeModal('modalStatcard')">✕</button>
         </div>
@@ -1853,16 +1744,9 @@
     }
 
     /* ---------------- MODAL HELPERS ---------------- */
-    function openModal(id) {
-      document.getElementById(id).classList.add('active');
-    }
-    function closeModal(id) {
-      document.getElementById(id).classList.remove('active');
-    }
-    function openRulesModal() {
-      openModal('modalRules');
-    }
-
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+    function openRulesModal() { openModal('modalRules'); }
     function switchScreen(id) {
       document.querySelectorAll('.screen-view').forEach(el => el.classList.remove('active'));
       document.getElementById(id).classList.add('active');
