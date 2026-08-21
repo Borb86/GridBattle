@@ -467,42 +467,46 @@
       background: var(--card-bg);
       border: 1.5px solid var(--border-dark);
       border-radius: 12px;
-      padding: 10px 14px;
+      padding: 0;
       display: flex;
+      flex-direction: row;
+      align-items: stretch;
       justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .builder-card-left {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex: 1;
       overflow: hidden;
+      min-height: 105px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
 
     .builder-portrait-box {
-      width: 76px;
-      height: 76px;
-      border-radius: 10px;
+      flex: 0 0 95px;
+      width: 95px;
       background: #0d0d12;
-      border: 2px solid var(--gold);
+      border-right: 2px solid var(--gold);
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      flex-shrink: 0;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      position: relative;
     }
     .builder-portrait-box img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
     }
     .builder-portrait-box svg {
-      width: 80%;
-      height: 80%;
+      width: 75%;
+      height: 75%;
+    }
+
+    .builder-card-body {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      gap: 10px;
+      overflow: hidden;
     }
 
     .builder-unit-details {
@@ -510,7 +514,7 @@
       overflow: hidden;
     }
     .builder-unit-details h4 {
-      font-size: 13.5px;
+      font-size: 14px;
       font-weight: 800;
       color: #fff;
       margin-bottom: 2px;
@@ -532,7 +536,7 @@
     .builder-card-right {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       flex-shrink: 0;
     }
 
@@ -772,19 +776,24 @@
     .roster-live-card {
       background: var(--f-card, var(--card-bg));
       border: 2px solid var(--f-border, var(--border-dark));
-      border-radius: 12px;
-      padding: 10px;
+      border-radius: 14px;
+      padding: 0;
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      flex-direction: row;
+      align-items: stretch;
       position: relative;
       cursor: pointer;
       transition: transform 0.15s ease, border-color 0.15s ease;
-      min-height: 130px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+      min-height: 135px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
     }
     .roster-live-card:hover {
       border-color: var(--f-accent, var(--gold));
+      transform: translateY(-2px);
+    }
+    .roster-live-card:active {
+      transform: scale(0.98);
     }
 
     .roster-live-card.exhausted {
@@ -800,51 +809,59 @@
       pointer-events: none;
     }
 
-    .live-card-header {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .live-portrait-thumb {
-      width: 72px;
-      height: 72px;
-      border-radius: 10px;
-      background: #0d0d12;
-      border: 2px solid var(--f-accent, var(--gold));
+    /* Full-Height Left Portrait Column */
+    .live-card-portrait-full {
+      flex: 0 0 100px;
+      width: 100px;
+      background: #09090e;
+      border-right: 2px solid var(--f-border, var(--gold));
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      position: relative;
     }
-    .live-portrait-thumb img {
+    .live-card-portrait-full img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
     }
-    .live-portrait-thumb svg {
-      width: 80%;
-      height: 80%;
+    .live-card-portrait-full svg {
+      width: 75%;
+      height: 75%;
     }
 
-    .live-card-info {
+    /* Right Column: All Content, Stats, HP, Tokens */
+    .live-card-content-right {
       flex: 1;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 5px;
       overflow: hidden;
     }
+
+    .live-card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 6px;
+    }
     .live-card-name {
-      font-size: 13px;
-      font-weight: 800;
+      font-size: 13.5px;
+      font-weight: 900;
       color: #fff;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .live-card-role {
-      font-size: 9.5px;
+      font-size: 10px;
       color: var(--f-accent, var(--gold));
-      font-weight: 600;
+      font-weight: 700;
+      white-space: nowrap;
     }
 
     /* Live Stat Bar */
@@ -1516,7 +1533,7 @@
 
     function adjustUnitCount(unitId, delta) {
       const unit = UNIT_DB[appState.selectedFactionKey].find(u => u.id === unitId);
-      const currentPts = appState.draftRoster.reduce((sum, item) => sum + item.cost, 0);
+      const currentPts = calculateTotalDraftPoints();
 
       if (delta > 0) {
         if (currentPts + unit.cost > appState.pointBudget) {
@@ -1526,6 +1543,9 @@
         // Clone instance with unique runtime ID
         const inst = JSON.parse(JSON.stringify(unit));
         inst.instId = 'u_' + Math.random().toString(36).substr(2, 9);
+        inst.baseHp = unit.hp;
+        inst.hpUpgrade = 0;
+        inst.hp = unit.hp;
         inst.currentHp = unit.hp;
         inst.isExhausted = false;
         inst.hasAim = false;
@@ -1539,22 +1559,42 @@
         }
       }
 
+      renderArmyBuilder();
       updateBuilderBudget();
-      updateUnitCountDisplays();
+    }
+
+    function adjustUnitHpUpgrade(instId, delta) {
+      const inst = appState.draftRoster.find(item => item.instId === instId);
+      if (!inst) return;
+
+      const currentPts = calculateTotalDraftPoints();
+      if (delta > 0) {
+        if (currentPts + 1 > appState.pointBudget) {
+          alert(`Cannot add +1 HP! You have reached your ${appState.pointBudget} point budget.`);
+          return;
+        }
+        inst.hpUpgrade = (inst.hpUpgrade || 0) + 1;
+      } else if (delta < 0 && (inst.hpUpgrade || 0) > 0) {
+        inst.hpUpgrade = Math.max(0, inst.hpUpgrade - 1);
+      }
+
+      inst.hp = (inst.baseHp || inst.hp) + inst.hpUpgrade;
+      inst.currentHp = inst.hp;
+
+      renderArmyBuilder();
+      updateBuilderBudget();
+    }
+
+    function calculateTotalDraftPoints() {
+      return appState.draftRoster.reduce((sum, item) => sum + item.cost + (item.hpUpgrade || 0), 0);
     }
 
     function updateUnitCountDisplays() {
-      (UNIT_DB[appState.selectedFactionKey] || []).forEach(u => {
-        const el = document.getElementById(`count_${u.id}`);
-        if (el) {
-          const count = appState.draftRoster.filter(item => item.id === u.id).length;
-          el.innerText = count;
-        }
-      });
+      // Kept for backward compatibility
     }
 
     function updateBuilderBudget() {
-      const totalPts = appState.draftRoster.reduce((sum, item) => sum + item.cost, 0);
+      const totalPts = calculateTotalDraftPoints();
       document.getElementById('builderPtsDisplay').innerText = `${totalPts} / ${appState.pointBudget} PTS`;
 
       const deployBtn = document.getElementById('btnDeployArmy');
@@ -1566,10 +1606,12 @@
       appState.victoryPoints = 0;
       appState.armedTool = null;
 
+      const totalSpent = calculateTotalDraftPoints();
+
       // Apply Faction Theme
       const gpScreen = document.getElementById('screenGameplay');
       gpScreen.className = `screen-view active theme-${appState.selectedFactionKey}`;
-      document.getElementById('gameplayFactionTitle').innerText = `${FACTION_DATA[appState.selectedFactionKey].name.toUpperCase()} • ${appState.pointBudget} PTS`;
+      document.getElementById('gameplayFactionTitle').innerText = `${FACTION_DATA[appState.selectedFactionKey].name.toUpperCase()} • ${totalSpent}/${appState.pointBudget} PTS`;
       document.getElementById('gameplayVP').innerText = '0';
 
       disarmTool();
