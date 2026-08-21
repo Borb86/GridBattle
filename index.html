@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Grid Battle - Tablet & Mobile Companion</title>
+  <style>
+    :root {
+      --bg-dark: #0d0d12;
+      --panel-bg: #161620;
+      --card-bg: #1e1e2c;
+      --border-dark: #323246;
+      --text-main: #f5f5fa;
+      --text-muted: #9595a8;
+      --gold: #e6b832;
+      --red: #d32f2f;
+      --green: #2e7d32;
+      --blue: #1976d2;
+      --orange: #f57c00;
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      overflow: hidden;
+    }
+
+    /* Screen Views - Responsive Full Viewport Container */
+    .screen-view {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none !important;
+      flex-direction: column;
+      background: var(--bg-dark);
+      z-index: 10;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .screen-view.active {
+      display: flex !important;
+    }
+
+    /* Faction Color Palettes */
+    .theme-blood_angels {
+      --f-primary: #b81424;
+      --f-accent: #e6b832;
+      --f-bg-radial: radial-gradient(circle at 50% 20%, #320c13 0%, #0d0406 100%);
+      --f-card: #250d12;
+      --f-border: #751722;
+      --f-highlight: #ff4d5a;
+    }
+
+    .theme-orks {
+      --f-primary: #348a34;
+      --f-accent: #f07814;
+      --f-bg-radial: radial-gradient(circle at 50% 20%, #102914 0%, #051007 100%);
+      --f-card: #132616;
+      --f-border: #236323;
+      --f-highlight: #4cd964;
+    }
+
+    .theme-custodes {
+      --f-primary: #c99e28;
+      --f-accent: #b01924;
+      --f-bg-radial: radial-gradient(circle at 50% 20%, #2b230d 0%, #120e06 100%);
+      --f-card: #27200e;
+      --f-border: #8c6e19;
+      --f-highlight: #ffd700;
+    }
+
+    /* ==========================================================
+       SCREEN 1: FACTION SELECT (Scrollable, Responsive)
+       ========================================================== */
+    #screenFactionSelect {
+      background: radial-gradient(circle at 50% 30%, #1c1c2b 0%, #09090e 100%);
+      align-items: center;
+      justify-content: flex-start;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
+      padding: 24px 16px 50px 16px;
+    }
+
+    .faction-select-title {
+      text-align: center;
+      margin-bottom: 18px;
+      flex-shrink: 0;
+    }
+    .faction-select-title h1 {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-shadow: 0 0 20px rgba(230, 184, 50, 0.45);
+    }
+    .faction-select-title p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Direct Rules Button on Faction Select Screen */
+    .rules-direct-btn-container {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .btn-view-rules-direct {
+      background: rgba(230, 184, 50, 0.12);
+      border: 1.5px solid var(--gold);
+      color: var(--gold);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+    .btn-view-rules-direct:hover, .btn-view-rules-direct:active {
+      background: var(--gold);
+      color: #121218;
+      box-shadow: 0 0 16px rgba(230, 184, 50, 0.6);
+    }
+
+    .faction-cards-grid {
+      display: flex;
+      gap: 18px;
+      max-width: 960px;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .faction-card-btn {
+      flex: 1 1 240px;
+      max-width: 280px;
+      min-height: 260px;
+      background: #181824;
+      border: 2px solid #333348;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+    }
+
+    .faction-card-btn:hover, .faction-card-btn:active {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.85);
+    }
+
+    .faction-card-btn.ba {
+      background: linear-gradient(180deg, #280e14 0%, #140508 100%);
+      border-color: #8a1723;
+    }
+    .faction-card-btn.ba:hover {
+      border-color: #ff3b4e;
+    }
+
+    .faction-card-btn.orks {
+      background: linear-gradient(180deg, #122915 0%, #071609 100%);
+      border-color: #276e27;
+    }
+    .faction-card-btn.orks:hover {
+      border-color: #4cd964;
+    }
+
+    .faction-card-btn.custodes {
+      background: linear-gradient(180deg, #2a220e 0%, #151006 100%);
+      border-color: #9c7b1c;
+    }
+    .faction-card-btn.custodes:hover {
+      border-color: #ffd700;
+    }
+
+    .faction-card-icon-container {
+      width: 90px;
+      height: 90px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+    .faction-card-icon-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .faction-card-icon-container svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .faction-card-btn h3 {
+      font-size: 19px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .faction-card-btn span {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.35;
+    }
+
+    /* Modal Popups */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #181824;
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 88vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 20px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.95);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .modal-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #333348;
+      padding-bottom: 8px;
+    }
+    .modal-header-row h2 {
+      font-size: 19px;
+      color: #fff;
+      font-weight: 900;
+    }
+    .btn-close-modal {
+      background: #2b2b3b;
+      color: #fff;
+      border: 1px solid #44445a;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .faction-quote-block {
+      background: rgba(0, 0, 0, 0.4);
+      border-left: 3px solid var(--gold);
+      padding: 10px 14px;
+      border-radius: 4px;
+      font-style: italic;
+      font-size: 13px;
+      color: #e0e0f0;
+      line-height: 1.4;
+    }
+
+    .faction-playstyle-block h4, .faction-skills-block h4 {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .faction-playstyle-block p {
+      font-size: 13px;
+      color: #ddd;
+      line-height: 1.4;
+    }
+
+    .skill-item {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      font-size: 12px;
+      color: #ccc;
+    }
+    .skill-item strong {
+      color: #fff;
+    }
+
+    .btn-confirm-faction {
+      background: linear-gradient(135deg, var(--green), #4cd964);
+      color: #fff;
+      border: none;
+      padding: 13px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(46, 125, 50, 0.4);
+      margin-top: 6px;
+    }
+
+    /* Point Cap Selection */
+    .pts-btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .btn-pts-opt {
+      flex: 1;
+      background: #242436;
+      border: 1px solid #44445a;
+      color: #fff;
+      padding: 12px 8px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 800;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-pts-opt.selected {
+      background: #b81424;
+      border-color: #ff4d5a;
+      box-shadow: 0 0 14px rgba(184, 20, 36, 0.6);
+    }
+
+    .custom-pts-input-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .custom-pts-input {
+      flex: 1;
+      background: #14141e;
+      border: 1px solid #44445a;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    /* ==========================================================
+       SCREEN 2: ARMY CREATION / ROSTER BUILDER
+       ========================================================== */
+    #screenArmyBuilder {
+      padding: 12px 16px;
+      background: var(--bg-dark);
+    }
+
+    .builder-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel-bg);
+      border: 1px solid var(--border-dark);
+      padding: 8px 14px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      flex-shrink: 0;
+      gap: 8px;
+    }
+
+    .builder-faction-info h2 {
+      font-size: 17px;
+      font-weight: 900;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    .builder-budget-tracker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pts-badge-display {
+      font-size: 14px;
+      font-weight: 900;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 5px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--gold);
+      white-space: nowrap;
+    }
+
+    .btn-deploy-army {
+      background: linear-gradient(135deg, var(--green), #4cd964);
+      color: #fff;
+      border: none;
+      padding: 9px 15px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(46, 125, 50, 0.4);
+      white-space: nowrap;
+    }
+    .btn-deploy-army:disabled {
+      background: #444;
+      color: #888;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .builder-scroll-list {
+      flex: 1;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 4px;
+    }
+
+    .builder-unit-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-dark);
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .builder-card-left {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .builder-portrait-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
+      background: #111;
+      border: 1.5px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .builder-portrait-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .builder-portrait-box svg {
+      width: 80%;
+      height: 80%;
+    }
+
+    .builder-unit-details {
+      flex: 1;
+      overflow: hidden;
+    }
+    .builder-unit-details h4 {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .builder-unit-details .unit-role {
+      font-size: 10.5px;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .builder-unit-details .unit-stats-summary {
+      font-size: 10.5px;
+      color: var(--text-muted);
+    }
+
+    .builder-card-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .unit-cost-tag {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--gold);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 5px 8px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      min-width: 54px;
+      text-align: center;
+    }
+
+    .builder-count-controls {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-count-adjust {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      border: none;
+      background: #333346;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-count-adjust.add {
+      background: var(--green);
+    }
+    .btn-count-adjust.remove {
+      background: var(--red);
+    }
+    .selected-unit-count {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    /* ==========================================================
+       SCREEN 3: RESPONSIVE GAMEPLAY TRACKER (Portrait & Landscape)
+       ========================================================== */
+    #screenGameplay {
+      padding: 8px 10px;
+      gap: 8px;
+      background: var(--bg-dark);
+    }
+
+    #screenGameplay.theme-blood_angels {
+      background: var(--f-bg-radial);
+    }
+    #screenGameplay.theme-orks {
+      background: var(--f-bg-radial);
+    }
+    #screenGameplay.theme-custodes {
+      background: var(--f-bg-radial);
+    }
+
+    /* Responsive Top Bar */
+    .gameplay-top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(18, 18, 24, 0.9);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--f-border, var(--border-dark));
+      border-radius: 12px;
+      padding: 6px 10px;
+      flex-shrink: 0;
+      gap: 6px 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .gameplay-left-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .gameplay-faction-title {
+      font-size: 13.5px;
+      font-weight: 900;
+      color: var(--f-accent, var(--gold));
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .gameplay-vp-box {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(0, 0, 0, 0.45);
+      padding: 2px 7px;
+      border-radius: 8px;
+      border: 1px solid var(--f-border, var(--border-dark));
+    }
+    .vp-tag-lbl {
+      font-size: 9.5px;
+      font-weight: 800;
+      color: var(--text-muted);
+    }
+    .vp-score-num {
+      font-size: 15px;
+      font-weight: 900;
+      color: #fff;
+      min-width: 18px;
+      text-align: center;
+    }
+    .btn-vp-step {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1px solid var(--f-border, #444);
+      background: var(--f-card, #2b2b3b);
+      color: var(--f-accent, var(--gold));
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-reset-turn {
+      background: linear-gradient(135deg, #e65100, #ff9800);
+      color: #fff;
+      border: none;
+      padding: 5px 9px;
+      border-radius: 7px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(230, 81, 0, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    /* Marker Toolbar */
+    .marker-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .marker-tool-btn {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1.5px solid #444455;
+      color: #d0d0dd;
+      padding: 5px 8px;
+      border-radius: 7px;
+      font-size: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .marker-tool-btn.active-aim {
+      background: #b8860b;
+      border-color: #ffd700;
+      color: #fff;
+      box-shadow: 0 0 10px #ffd700;
+    }
+    .marker-tool-btn.active-overwatch {
+      background: #0056b3;
+      border-color: #3399ff;
+      color: #fff;
+      box-shadow: 0 0 10px #3399ff;
+    }
+    .marker-tool-btn.active-exhaust {
+      background: #616161;
+      border-color: #9e9e9e;
+      color: #fff;
+      box-shadow: 0 0 10px #9e9e9e;
+    }
+    .marker-tool-btn.active-wound {
+      background: #b71c1c;
+      border-color: #ff5252;
+      color: #fff;
+      box-shadow: 0 0 10px #ff5252;
+    }
+    .marker-tool-btn.active-heal {
+      background: #1b5e20;
+      border-color: #69f0ae;
+      color: #fff;
+      box-shadow: 0 0 10px #69f0ae;
+    }
+
+    /* Armed Tool Banner */
+    .armed-tool-banner {
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px dashed var(--gold);
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold);
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .armed-tool-banner.active {
+      display: flex;
+    }
+
+    /* Responsive Gameplay Roster Grid */
+    .gameplay-roster-grid {
+      flex: 1;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 10px;
+      padding-right: 2px;
+    }
+
+    .roster-live-card {
+      background: var(--f-card, var(--card-bg));
+      border: 2px solid var(--f-border, var(--border-dark));
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+      min-height: 130px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+    .roster-live-card:hover {
+      border-color: var(--f-accent, var(--gold));
+    }
+
+    .roster-live-card.exhausted {
+      opacity: 0.48;
+      filter: grayscale(0.7);
+      border-color: #555;
+    }
+    .roster-live-card.dead {
+      opacity: 0.25;
+      filter: grayscale(1);
+      border-color: #333;
+      text-decoration: line-through;
+      pointer-events: none;
+    }
+
+    .live-card-header {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .live-portrait-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background: #111;
+      border: 1.5px solid var(--f-accent, var(--gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .live-portrait-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .live-portrait-thumb svg {
+      width: 80%;
+      height: 80%;
+    }
+
+    .live-card-info {
+      flex: 1;
+      overflow: hidden;
+    }
+    .live-card-name {
+      font-size: 13px;
+      font-weight: 800;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .live-card-role {
+      font-size: 9.5px;
+      color: var(--f-accent, var(--gold));
+      font-weight: 600;
+    }
+
+    /* Live Stat Bar */
+    .live-stats-row {
+      display: flex;
+      gap: 4px;
+      margin-top: 6px;
+    }
+    .live-stat-pill {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--f-border, #444);
+      border-radius: 6px;
+      padding: 2px 3px;
+      text-align: center;
+    }
+    .live-stat-pill .lbl {
+      font-size: 7.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .live-stat-pill .val {
+      font-size: 10.5px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* Live HP Progress Bar */
+    .live-hp-container {
+      margin-top: 6px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 6px;
+      height: 15px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #444;
+      display: flex;
+      align-items: center;
+    }
+    .live-hp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #b81424, #28a745);
+      transition: width 0.3s ease;
+    }
+    .live-hp-text {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      font-size: 9px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 4px #000;
+    }
+
+    /* Applied Tokens Area */
+    .live-applied-tokens {
+      display: flex;
+      gap: 5px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+      min-height: 20px;
+      align-items: center;
+    }
+
+    .token-chip {
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 5px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+    }
+    .token-chip .del-x {
+      font-size: 10px;
+      opacity: 0.7;
+    }
+    .token-chip.aim {
+      background: #b8860b;
+      color: #fff;
+      border: 1px solid #ffd700;
+    }
+    .token-chip.overwatch {
+      background: #0056b3;
+      color: #fff;
+      border: 1px solid #3399ff;
+    }
+    .token-chip.exhausted {
+      background: #555;
+      color: #ddd;
+      border: 1px solid #888;
+    }
+    .token-chip.dead {
+      background: #771111;
+      color: #ff9999;
+    }
+
+    /* Statcard Modal */
+    .statcard-view-modal {
+      background: var(--f-card, #1e1e28);
+      border: 2px solid var(--f-accent, var(--gold));
+      border-radius: 16px;
+      max-width: 520px;
+      width: 100%;
+      max-height: 88vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .weapon-table-box {
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 8px;
+      border: 1px solid var(--f-border, #444);
+      padding: 8px;
+    }
+    .weapon-entry {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 5px 0;
+    }
+    .weapon-entry:last-child {
+      border-bottom: none;
+    }
+    .weapon-head {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 800;
+      color: #fff;
+      font-size: 12px;
+    }
+    .weapon-sub {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .rule-entry {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 6px;
+      padding: 7px 9px;
+      margin-bottom: 5px;
+      font-size: 11.5px;
+      color: #ddd;
+    }
+    .rule-entry strong {
+      color: var(--f-accent, var(--gold));
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SCREEN 1: FACTION SELECTION -->
+  <div class="screen-view active" id="screenFactionSelect">
+    <div class="faction-select-title">
+      <h1>⚔️ GRID BATTLE</h1>
+      <p>Single-Player Tablet & Mobile Companion</p>
+    </div>
+
+    <!-- Direct Rules Button -->
+    <div class="rules-direct-btn-container">
+      <button class="btn-view-rules-direct" onclick="openRulesModal()">
+        📖 VIEW GAME RULES & REFERENCE
+      </button>
+    </div>
+
+    <div class="faction-cards-grid">
+      <!-- Blood Angels -->
+      <div class="faction-card-btn ba" onclick="openFactionInfo('blood_angels')">
+        <div class="faction-card-icon-container">
+          <img src="assets/logos/blood_angels_logo.png" alt="Blood Angels Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <svg style="display:none;" viewBox="0 0 100 100"><polygon points="50,10 85,50 50,90 15,50" fill="#e6b832"/><circle cx="50" cy="45" r="18" fill="#120608"/></svg>
+        </div>
+        <h3>Blood Angels</h3>
+        <span>Noble sons of Sanguinius & Death Company shock troops</span>
+      </div>
+
+      <!-- Orks -->
+      <div class="faction-card-btn orks" onclick="openFactionInfo('orks')">
+        <div class="faction-card-icon-container">
+          <img src="assets/logos/orks_logo.png" alt="Orks Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <svg style="display:none;" viewBox="0 0 100 100"><polygon points="15,25 85,25 75,80 25,80" fill="#333" stroke="#348a34" stroke-width="5"/><polygon points="25,80 35,55 45,80 55,55 65,80 75,55" fill="#fff"/></svg>
+        </div>
+        <h3>The Orks</h3>
+        <span>Brutal Mega-Armour, WAAAGH! power, and Grot meat shields</span>
+      </div>
+
+      <!-- Custodes -->
+      <div class="faction-card-btn custodes" onclick="openFactionInfo('custodes')">
+        <div class="faction-card-icon-container">
+          <img src="assets/logos/custodes_logo.png" alt="Custodes Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <svg style="display:none;" viewBox="0 0 100 100"><polygon points="50,10 85,35 70,85 30,85 15,35" fill="#c99e28"/><polygon points="50,25 72,42 62,72 38,72 28,42" fill="#b01924"/></svg>
+        </div>
+        <h3>Adeptus Custodes</h3>
+        <span>Indestructible auramite titans of the Golden Throne</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Faction Info Pop-up Modal -->
+  <div class="modal-backdrop" id="modalFactionInfo">
+    <div class="modal-box" id="factionInfoBox">
+      <div class="modal-header-row">
+        <h2 id="infoFactionTitle">FACTION NAME</h2>
+        <button class="btn-close-modal" onclick="closeModal('modalFactionInfo')">✕</button>
+      </div>
+
+      <div class="faction-quote-block" id="infoFactionQuote">"Faction Quote Here"</div>
+
+      <div class="faction-playstyle-block">
+        <h4>⚔️ Tactical Playstyle</h4>
+        <p id="infoFactionPlaystyle">Playstyle summary...</p>
+      </div>
+
+      <div class="faction-skills-block">
+        <h4>📜 Unique Faction Skills</h4>
+        <div id="infoFactionSkillsList"></div>
+      </div>
+
+      <button class="btn-confirm-faction" onclick="confirmFaction()">✓ CONFIRM FACTION & SET POINTS</button>
+    </div>
+  </div>
+
+  <!-- Match Points Modal -->
+  <div class="modal-backdrop" id="modalPointsSelect">
+    <div class="modal-box">
+      <div class="modal-header-row">
+        <h2>SET MATCH POINT LIMIT</h2>
+        <button class="btn-close-modal" onclick="closeModal('modalPointsSelect')">✕</button>
+      </div>
+      <p style="font-size: 13px; color: var(--text-muted);">Choose your squad budget for this skirmish:</p>
+      
+      <div class="pts-btn-row">
+        <div class="btn-pts-opt" id="optPts10" onclick="selectPoints(10)">10 POINTS<br><span style="font-size: 10px; font-weight: normal;">Trial Game</span></div>
+        <div class="btn-pts-opt selected" id="optPts12" onclick="selectPoints(12)">12 POINTS<br><span style="font-size: 10px; font-weight: normal;">Standard</span></div>
+      </div>
+
+      <div style="margin-top: 12px;">
+        <span style="font-size: 12px; font-weight: 700; color: var(--gold);">Custom Point Budget:</span>
+        <div class="custom-pts-input-group">
+          <input type="number" class="custom-pts-input" id="customPtsInput" placeholder="e.g. 15, 20..." min="1" max="100">
+          <button class="btn-pts-opt" style="flex: 0 0 100px; padding: 10px;" onclick="selectCustomPoints()">SET</button>
+        </div>
+      </div>
+
+      <button class="btn-confirm-faction" onclick="goToArmyBuilder()">BUILD ROSTER →</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: ARMY CREATION / ROSTER BUILDER -->
+  <div class="screen-view" id="screenArmyBuilder">
+    <div class="builder-top-bar">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <button class="btn-count-adjust" onclick="backToFactionSelect()">←</button>
+        <div class="builder-faction-info">
+          <h2 id="builderFactionName">BLOOD ANGELS</h2>
+          <span style="font-size: 10.5px; color: var(--text-muted);">Select models (Sorted by Points)</span>
+        </div>
+      </div>
+      <div class="builder-budget-tracker">
+        <div class="pts-badge-display" id="builderPtsDisplay">0 / 12 PTS</div>
+        <button class="btn-deploy-army" id="btnDeployArmy" disabled onclick="deployArmyToGameplay()">🚀 DEPLOY</button>
+      </div>
+    </div>
+
+    <!-- Scrollable Sorted Units List -->
+    <div class="builder-scroll-list" id="builderUnitsList"></div>
+  </div>
+
+  <!-- SCREEN 3: RESPONSIVE GAMEPLAY TRACKER -->
+  <div class="screen-view" id="screenGameplay">
+    <!-- Top Control Bar -->
+    <div class="gameplay-top-bar">
+      <div class="gameplay-left-group">
+        <div class="gameplay-faction-title" id="gameplayFactionTitle">BLOOD ANGELS</div>
+        <div class="gameplay-vp-box">
+          <span class="vp-tag-lbl">VP</span>
+          <button class="btn-vp-step" onclick="changeVP(-1)">-</button>
+          <span class="vp-score-num" id="gameplayVP">0</span>
+          <button class="btn-vp-step" onclick="changeVP(1)">+</button>
+        </div>
+        <button class="btn-reset-turn" onclick="resetTurnExhaustion()">🔄 RESET TURN</button>
+      </div>
+
+      <!-- Marker Toolbar Buttons -->
+      <div class="marker-toolbar">
+        <button class="marker-tool-btn" id="toolAim" onclick="armTool('aim')">🎯 AIM</button>
+        <button class="marker-tool-btn" id="toolOverwatch" onclick="armTool('overwatch')">🛡️ OVERWATCH</button>
+        <button class="marker-tool-btn" id="toolExhaust" onclick="armTool('exhaust')">⏳ EXHAUST</button>
+        <button class="marker-tool-btn" id="toolWound" onclick="armTool('wound')">🩸 WOUND (-1)</button>
+        <button class="marker-tool-btn" id="toolHeal" onclick="armTool('heal')">💚 HEAL (+1)</button>
+        <button class="marker-tool-btn" onclick="openRulesModal()">📖 RULES</button>
+        <button class="marker-tool-btn" onclick="confirmExitToBuilder()">⚙️ ROSTER</button>
+      </div>
+    </div>
+
+    <!-- Armed Tool Notification Banner -->
+    <div class="armed-tool-banner" id="armedToolBanner">
+      <span id="armedToolText">TOOL ARMED: Tap on any unit card below to apply.</span>
+      <button style="background: none; border: none; color: #fff; font-weight: bold; cursor: pointer;" onclick="disarmTool()">✕ CANCEL</button>
+    </div>
+
+    <!-- Main Body: Deployed Units Grid -->
+    <div class="gameplay-roster-grid" id="gameplayRosterGrid"></div>
+  </div>
+
+  <!-- MODALS: FULL STATCARD INSPECT & RULES REFERENCE -->
+  <div class="modal-backdrop" id="modalStatcard">
+    <div class="statcard-view-modal" id="statcardModalContent"></div>
+  </div>
+
+  <div class="modal-backdrop" id="modalRules">
+    <div class="modal-box">
+      <div class="modal-header-row">
+        <h2>📖 GRID BATTLE RULES</h2>
+        <button class="btn-close-modal" onclick="closeModal('modalRules')">✕</button>
+      </div>
+      <div class="rule-entry"><strong>1. Actions (2 per Turn):</strong> Move (Base spd), Sprint (+2 sq), Charge (2D6, 7+ needed), Shoot, Fight (Melee), Aim (+1 Rng / reroll 1), Overwatch (interrupt, hits on 6+), Interact.</div>
+      <div class="rule-entry"><strong>2. Combat Resolution:</strong> Attacker rolls attack dice (4+ = Hit, 6 = Critical). Defender rolls Defense dice (rolls &ge; Save cancel 1 Hit). Unsaved hits deal 1 Damage (HP loss).</div>
+      <div class="rule-entry"><strong>3. Cover & Obstacles:</strong> Soft Cover (+1 Save vs distant fire). Walls block Line of Sight completely.</div>
+      <div class="rule-entry" style="background: rgba(230, 184, 50, 0.1); border: 1px solid var(--gold);">
+        <strong>📄 Full Official Guide:</strong><br>
+        <a href="https://docs.google.com/document/d/17Do9PbIR_ypRf6qUral3j9prZJ8DJ5Gu4B1EQBokoEY/edit" target="_blank" style="color: var(--gold); text-decoration: underline; font-weight: bold; display: inline-block; margin-top: 4px;">
+          Open Google Doc Gameplay Guide ↗
+        </a>
+      </div>
+      <button class="btn-confirm-faction" onclick="closeModal('modalRules')">✓ CLOSE RULES</button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    /* ---------------- FACTIONS & UNIT DATABASE ---------------- */
+    const FACTION_DATA = {
+      blood_angels: {
+        name: "Blood Angels",
+        quote: "\"By the Blood of Sanguinius, we are vengeance made flesh! For the Emperor and the Angel!\"",
+        playstyle: "Versatile tactical firepower, high-risk superheated plasma, and frenzied melee shock troops that refuse to die.",
+        skills: [
+          { title: "The Black Rage", desc: "Succumbed battle-brothers move +1 square on Move actions and ignore the first wound taken." },
+          { title: "Supercharged Plasma", desc: "Overcharge plasma incinerators for +1 attack die and lethal armor melting (1s cause self-wound)." },
+          { title: "Veteran Leadership", desc: "Sergeants provide auras granting adjacent Space Marines re-rolls on hit rolls of 1." }
+        ]
+      },
+      orks: {
+        name: "The Orks",
+        quote: "\"WAAAGH! We'z da biggest and da strongest, an' we'z gonna smash da galaxy!\"",
+        playstyle: "Chaotic volume, crushing close-combat klaws, scrap-iron force fields, and expendable goblin meat shields.",
+        skills: [
+          { title: "Prophet of da WAAAGH!", desc: "Global round buff granting all friendly Orks +1 Move and +2 Melee attack dice." },
+          { title: "Kustom Force Field", desc: "Big Mek aura granting adjacent friendly Orks +1 Defense die against all ranged attacks." },
+          { title: "Meat Shield Intercept", desc: "Sacrifice adjacent Grots on a 2+ to absorb wounds meant for larger Ork units." }
+        ]
+      },
+      custodes: {
+        name: "Adeptus Custodes",
+        quote: "\"Each one of us is a fortress. Each one of us is a bastion of the Throne.\"",
+        playstyle: "Feel like an indestructible golden tank while hitting just as hard with fewer, elite units.",
+        skills: [
+          { title: "Aegis of the Emperor", desc: "Roll 1D6 on any unsaved wound: on a 5+, the wound is completely negated." },
+          { title: "Resilient Guardian", desc: "Each Custodian counts as 2 models when contesting Objective consoles." },
+          { title: "Guardian Cleave", desc: "Excess melee damage carries over to adjacent engaged enemy models." }
+        ]
+      }
+    };
+
+    const UNIT_DB = {
+      blood_angels: [
+        {
+          id: "ba_dante", name: "Commander Dante", subtitle: "Supreme Chapter Master",
+          cost: 5, move: "3+1\"", hp: 5, def: "3 D6", save: "3+", glyph: "dante", img: "assets/portraits/dante.png",
+          melee: "6 D6 (Axe Mortalis)", ranged: "4 D6 (Rng 2 Inferno)",
+          weapons: [
+            { name: "Axe Mortalis", range: "Melee (1)", dice: "6 D6", traits: "Armor-Piercing, Fatal Strikes" },
+            { name: "Inferno Pistol", range: "Range 2", dice: "4 D6", traits: "Melta (Ignores Armor Saves)" }
+          ],
+          rules: [
+            { title: "INSPIRING LEADER", text: "Friendly units within 2 spaces gain +1 Melee die and +1 to Charge." },
+            { title: "LORD OF THE HOST", text: "Once per round, Dante may re-roll any single attack or defense pool." }
+          ]
+        },
+        {
+          id: "ba_mephiston", name: "Chief Librarian Mephiston", subtitle: "The Lord of Death",
+          cost: 5, move: "3+1\"", hp: 5, def: "3 D6", save: "3+", glyph: "dante", img: "assets/portraits/mephiston.png",
+          melee: "6 D6 (Vitarus Blade)", ranged: "5 D6 (Rng 3 Psychic Smite)",
+          weapons: [
+            { name: "Vitarus Force Sword", range: "Melee (1)", dice: "6 D6", traits: "Armor-Piercing, Fatal Strikes" },
+            { name: "Psychic Smite / Pistol", range: "Range 3", dice: "5 D6", traits: "Hazardous: 1s deal 1 self-wound" }
+          ],
+          rules: [
+            { title: "LORD OF DEATH", text: "Completely ignores the first wound suffered each combat encounter, and rolls a 5+ shrug on all subsequent wounds." },
+            { title: "PSYCHIC HOOD", text: "Cancels enemy leadership and aura bonuses within 2 squares." }
+          ]
+        },
+        {
+          id: "ba_sgt_power_sword", name: "Hellblaster Vet Sergeant", subtitle: "Gold / Bare Head + Power Sword",
+          cost: 3, move: "3\"", hp: 2, def: "2 D6", save: "3+", glyph: "sgt", img: "assets/portraits/vet_sergeant.png",
+          melee: "4 D6 (Power Sword)", ranged: "4 D6 (Rng 4 Plasma)",
+          weapons: [
+            { name: "Plasma Incinerator", range: "Range 4", dice: "4 D6", traits: "Overcharge (5 D6, 1s self-damage)" },
+            { name: "Master Power Sword", range: "Melee (1)", dice: "4 D6", traits: "Armor-Piercing (-1 Save)" }
+          ],
+          rules: [
+            { title: "VETERAN LEADER (Aura)", text: "Adjacent Space Marines may re-roll hit rolls of 1 on ranged attacks." }
+          ]
+        },
+        {
+          id: "ba_scoped_marksman", name: "Scoped Plasma Marksman", subtitle: "Gold Helmet + Scoped Heavy Rifle",
+          cost: 2, move: "3\"", hp: 2, def: "2 D6", save: "3+", glyph: "scope", img: "assets/portraits/scoped_marksman.png",
+          melee: "2 D6 (Blade)", ranged: "4 D6 (Rng 4/5 Scoped)",
+          weapons: [
+            { name: "Scoped Plasma Rifle", range: "Range 4/5", dice: "4 D6", traits: "Range 5 with Aim action" }
+          ],
+          rules: [
+            { title: "TARGETING OPTICS", text: "Aim action grants Range 5 and re-rolls 1 miss. Ignores Soft Cover." }
+          ]
+        },
+        {
+          id: "ba_vet_gunner", name: "Veteran Plasma Gunner", subtitle: "Gold Helmet + Pistol Specialist",
+          cost: 2, move: "3\"", hp: 2, def: "2 D6", save: "3+", glyph: "pistol", img: "assets/portraits/vet_gunner.png",
+          melee: "2 D6 (Pistol in Melee)", ranged: "4 D6 (Rng 4 Plasma)",
+          weapons: [
+            { name: "Plasma Incinerator", range: "Range 4", dice: "4 D6", traits: "Overcharge (5 D6)" },
+            { name: "Heavy Bolt Pistol", range: "Range 3", dice: "2 D6", traits: "Pistol (Usable in close melee)" }
+          ],
+          rules: [
+            { title: "FIRE DISCIPLINE", text: "Overwatch reaction attacks hit on a 5+ (instead of standard 6+)." }
+          ]
+        },
+        {
+          id: "ba_hellblaster_blue", name: "Hellblaster Fire Support", subtitle: "Blue Helmet Codex Heavy Support",
+          cost: 2, move: "3\"", hp: 2, def: "2 D6", save: "3+", glyph: "plasma", img: "assets/portraits/hellblaster.png",
+          melee: "2 D6 (Blade)", ranged: "4 D6 (Rng 4 Plasma)",
+          weapons: [
+            { name: "Plasma Incinerator", range: "Range 4", dice: "4 D6", traits: "Overcharge (5 D6, 1s self-damage)" }
+          ],
+          rules: [
+            { title: "SUPERCHARGED STRIKE", text: "Natural 6s on Overcharge cannot be saved by Armor." }
+          ]
+        },
+        {
+          id: "ba_infernus", name: "Infernus Marine", subtitle: "Pyreblaster Close Support",
+          cost: 2, move: "3\"", hp: 2, def: "2 D6", save: "3+", glyph: "flame", img: "assets/portraits/infernus.png",
+          melee: "3 D6 (Combat Blade)", ranged: "4 D6 (Rng 2 Pyreblaster)",
+          weapons: [
+            { name: "Pyreblaster", range: "Range 2", dice: "4 D6", traits: "Area Sweep (Hits target + 1 adjacent)" }
+          ],
+          rules: [
+            { title: "PURGING FLAMES", text: "Pyreblaster attacks completely ignore enemy Cover bonuses." }
+          ]
+        },
+        {
+          id: "ba_dc_melee", name: "Death Company (Melee)", subtitle: "Black Armor + Chainsword Berserker",
+          cost: 2, move: "3+1\"", hp: 2, def: "2 D6", save: "3+", glyph: "dc_skull", img: "assets/portraits/dc_melee.png",
+          melee: "4 D6 (+2 on Charge)", ranged: "2 D6 (Rng 3 Pistol)",
+          weapons: [
+            { name: "Astartes Chainsword", range: "Melee (1)", dice: "4 D6", traits: "+2 Attack dice on Charge" }
+          ],
+          rules: [
+            { title: "BLACK RAGE", text: "Moves +1 square on Move. Completely ignores the FIRST wound suffered." },
+            { title: "FRENZIED CHARGE", text: "On successful Charge (7+ on 2D6), rolls 6 Melee dice instead of 4." }
+          ]
+        },
+        {
+          id: "ba_dc_plasma", name: "Death Company Plasma", subtitle: "Black Armor + Frenzied Plasma",
+          cost: 2, move: "3+1\"", hp: 2, def: "2 D6", save: "3+", glyph: "dc_plasma", img: "assets/portraits/dc_plasma.png",
+          melee: "3 D6 (Plasma Pistol)", ranged: "4 D6 (Rng 4 Plasma)",
+          weapons: [
+            { name: "Frenzied Incinerator", range: "Range 4", dice: "4 D6", traits: "Overcharge (5 D6)" }
+          ],
+          rules: [
+            { title: "BLACK RAGE (Plasma Frenzy)", text: "Moves +1 square and ignores 1st wound. Can fire Plasma Pistol in melee." }
+          ]
+        }
+      ],
+      orks: [
+        {
+          id: "ork_ghaz", name: "Ghazghkull & Makari", subtitle: "The Beast of Armageddon",
+          cost: 7, move: "2\"", hp: 7, def: "3 D6", save: "3+", glyph: "ghaz", img: "assets/portraits/ghazghkull.png",
+          melee: "7 D6 (Klaw of Gork)", ranged: "6 D6 (Rng 3 Quad-Gun)",
+          weapons: [
+            { name: "Klaw of Gork", range: "Melee (1)", dice: "7 D6", traits: "Crush (Natural 6s inflict 2 wounds)" },
+            { name: "Mork's Roar", range: "Range 3", dice: "6 D6", traits: "Dakka Dakka (6s give extra shots)" }
+          ],
+          rules: [
+            { title: "PROPHET OF DA WAAAGH!", text: "Once per match: All Orks gain +1 Move and +2 Melee dice for 1 round." },
+            { title: "MAKARI'S 2+ BANNER", text: "1st unsaved wound each round allocated to Makari: 2+ Invulnerable save!" }
+          ]
+        },
+        {
+          id: "ork_bigmek", name: "Big Mek in Mega Armour", subtitle: "Heavy Tech-Boss + Grot Oiler",
+          cost: 4, move: "2\"", hp: 3, def: "3 D6", save: "3+", glyph: "bigmek", img: "assets/portraits/big_mek.png",
+          melee: "4 D6 (Power Klaw)", ranged: "3 D6 (Rng 3 Mega-Blasta)",
+          weapons: [
+            { name: "Kustom Mega-Blasta", range: "Range 3", dice: "3 D6", traits: "Hazardous (1s cause self-wound)" },
+            { name: "Power Klaw", range: "Melee (1)", dice: "4 D6", traits: "Armor-Crushing (-1 Save)" }
+          ],
+          rules: [
+            { title: "KUSTOM FORCE FIELD", text: "Friendly Orks within 1 square gain +1 Defense die vs ranged fire." },
+            { title: "GROT OILER ATTENDANT", text: "Patch Up: 1 Interact action repairs 1 HP. Or discard to absorb 1 wound." }
+          ]
+        },
+        {
+          id: "ork_meganob", name: "Meganob", subtitle: "Armored Juggernaut",
+          cost: 3, move: "2\"", hp: 3, def: "3 D6", save: "3+", glyph: "meganob", img: "assets/portraits/meganob.png",
+          melee: "5 D6 (Twin Klaws)", ranged: "3 D6 (Rng 3 Kombi)",
+          weapons: [
+            { name: "Twin Power Klaws", range: "Melee (1)", dice: "5 D6", traits: "Devastating armor crushing" }
+          ],
+          rules: [
+            { title: "SLOW BUT DEADLY", text: "Cannot Sprint, but gains +1 Defense die in Melee combat." }
+          ]
+        },
+        {
+          id: "ork_gretchin_swarm", name: "Gretchin Swarm & Runtherd", subtitle: "5 Gretchin Minions + 1 Runtherd",
+          cost: 3, move: "3\"", hp: 4, def: "1 D6", save: "5+", glyph: "gretchin", img: "assets/portraits/gretchin_swarm.png",
+          melee: "3 D6 (Grabba-Stikk)", ranged: "5 D6 (Rng 3 Volley)",
+          weapons: [
+            { name: "Grot Blasters", range: "Range 3", dice: "5 D6", traits: "Weak Shots (Enemy saves at +1)" }
+          ],
+          rules: [
+            { title: "SWARM CASUALTIES", text: "Each wound suffered removes 1 Grot model (-1 attack die)." },
+            { title: "MEAT SHIELD", text: "If adjacent friendly Ork is hit, allocate wound to Grot on a 2+." }
+          ]
+        }
+      ],
+      custodes: [
+        {
+          id: "custodes_warden", name: "Custodian Warden", subtitle: "Auramite Gold Heavy Elite",
+          cost: 4, move: "3\"", hp: 4, def: "3 D6", save: "2+", glyph: "custodes", img: "assets/portraits/custodian_warden.png",
+          melee: "5 D6 (Guardian Blade)", ranged: "3 D6 (Rng 4 Bolt)",
+          weapons: [
+            { name: "Guardian Spear (Melee)", range: "Melee (1)", dice: "5 D6", traits: "Cleave (Excess hits carry over)" },
+            { name: "Guardian Spear (Bolt)", range: "Range 4", dice: "3 D6", traits: "Master-Crafted Bolt fire" }
+          ],
+          rules: [
+            { title: "RESILIENT GUARDIAN", text: "Counts as 2 models when contesting Objective consoles." },
+            { title: "AEGIS OF THE EMPEROR", text: "Roll 1D6 against any unsaved wound: 5+ shrugs off the damage!" }
+          ]
+        }
+      ]
+    };
+
+    function getPortraitHTML(unit) {
+      if (unit.img) {
+        return `<img src="${unit.img}" alt="${unit.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div style="display:none; width:100%; height:100%;">${getGlyphSVG(unit.glyph)}</div>`;
+      }
+      return getGlyphSVG(unit.glyph);
+    }
+
+    function getGlyphSVG(type) {
+      if (type === 'dante') return '<svg viewBox="0 0 100 100"><polygon points="50,10 85,50 50,90 15,50" fill="#e6b832"/><circle cx="50" cy="45" r="18" fill="#120608"/></svg>';
+      if (type === 'sgt') return '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#e6b832"/><rect x="44" y="15" width="12" height="70" fill="#b81424"/><rect x="15" y="44" width="70" height="12" fill="#b81424"/></svg>';
+      if (type === 'scope') return '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="36" fill="none" stroke="#e6b832" stroke-width="6"/><line x1="10" y1="50" x2="90" y2="50" stroke="#e6b832" stroke-width="4"/><line x1="50" y1="10" x2="50" y2="90" stroke="#e6b832" stroke-width="4"/><circle cx="50" cy="50" r="12" fill="#b81424"/></svg>';
+      if (type === 'pistol') return '<svg viewBox="0 0 100 100"><polygon points="25,30 75,30 75,55 55,55 55,80 35,80 35,55 25,55" fill="#e6b832"/><circle cx="50" cy="42" r="8" fill="#b81424"/></svg>';
+      if (type === 'plasma') return '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#2864dc" stroke="#e6b832" stroke-width="4"/><rect x="25" y="44" width="50" height="12" fill="#78dcff" rx="4"/></svg>';
+      if (type === 'flame') return '<svg viewBox="0 0 100 100"><polygon points="50,15 80,60 65,85 35,85 20,60" fill="#f05a14"/><polygon points="50,30 68,60 58,75 42,75 32,60" fill="#ffd228"/></svg>';
+      if (type === 'dc_skull') return '<svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#dc1e1e" stroke-width="12"/><line x1="85" y1="15" x2="15" y2="85" stroke="#dc1e1e" stroke-width="12"/><circle cx="50" cy="50" r="22" fill="#eee"/><circle cx="42" cy="46" r="5" fill="#111"/><circle cx="58" cy="46" r="5" fill="#111"/></svg>';
+      if (type === 'dc_plasma') return '<svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#dc1e1e" stroke-width="10"/><line x1="85" y1="15" x2="15" y2="85" stroke="#dc1e1e" stroke-width="10"/><circle cx="50" cy="50" r="24" fill="#111" stroke="#50b4ff" stroke-width="5"/><circle cx="50" cy="50" r="10" fill="#78dcff"/></svg>';
+      if (type === 'custodes') return '<svg viewBox="0 0 100 100"><polygon points="50,10 85,35 70,85 30,85 15,35" fill="#c99e28"/><polygon points="50,25 72,42 62,72 38,72 28,42" fill="#b01924"/></svg>';
+      if (type === 'ghaz') return '<svg viewBox="0 0 100 100"><polygon points="15,25 85,25 75,80 25,80" fill="#333" stroke="#348a34" stroke-width="5"/><polygon points="25,80 35,55 45,80 55,55 65,80 75,55" fill="#fff"/></svg>';
+      if (type === 'bigmek') return '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#333" stroke="#f07814" stroke-width="6"/><circle cx="38" cy="45" r="12" fill="#dc2828"/><rect x="20" y="65" width="60" height="10" fill="#f07814"/></svg>';
+      if (type === 'meganob') return '<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="#333" stroke="#348a34" stroke-width="5"/><polygon points="25,80 35,55 45,80 55,55 65,80 75,55" fill="#fff"/></svg>';
+      if (type === 'gretchin') return '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="55" rx="28" ry="22" fill="#50a03c"/><polygon points="25,50 5,25 35,40" fill="#50a03c"/><polygon points="75,50 95,25 65,40" fill="#50a03c"/><circle cx="40" cy="50" r="6" fill="#dc2828"/><circle cx="60" cy="50" r="6" fill="#dc2828"/></svg>';
+      return '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#444"/></svg>';
+    }
+
+    /* ---------------- APP STATE ---------------- */
+    const appState = {
+      selectedFactionKey: 'blood_angels',
+      pointBudget: 12,
+      draftRoster: [],
+      deployedRoster: [],
+      victoryPoints: 0,
+      armedTool: null
+    };
+
+    /* ---------------- SCREEN 1 LOGIC ---------------- */
+    function openFactionInfo(fKey) {
+      appState.selectedFactionKey = fKey;
+      const data = FACTION_DATA[fKey];
+
+      document.getElementById('infoFactionTitle').innerText = data.name.toUpperCase();
+      document.getElementById('infoFactionQuote').innerText = data.quote;
+      document.getElementById('infoFactionPlaystyle').innerText = data.playstyle;
+      document.getElementById('infoFactionSkillsList').innerHTML = data.skills.map(s => `
+        <div class="skill-item"><strong>✦ ${s.title}:</strong> ${s.desc}</div>
+      `).join('');
+
+      openModal('modalFactionInfo');
+    }
+
+    function confirmFaction() {
+      closeModal('modalFactionInfo');
+      openModal('modalPointsSelect');
+    }
+
+    function selectPoints(pts) {
+      appState.pointBudget = pts;
+      document.getElementById('optPts10').classList.toggle('selected', pts === 10);
+      document.getElementById('optPts12').classList.toggle('selected', pts === 12);
+      document.getElementById('customPtsInput').value = '';
+    }
+
+    function selectCustomPoints() {
+      const val = parseInt(document.getElementById('customPtsInput').value, 10);
+      if (val && val > 0) {
+        appState.pointBudget = val;
+        document.getElementById('optPts10').classList.remove('selected');
+        document.getElementById('optPts12').classList.remove('selected');
+      }
+    }
+
+    function goToArmyBuilder() {
+      closeModal('modalPointsSelect');
+      appState.draftRoster = [];
+
+      // Set Faction Name
+      document.getElementById('builderFactionName').innerText = FACTION_DATA[appState.selectedFactionKey].name.toUpperCase();
+      
+      // Render Sorted Units (Highest to Lowest Points)
+      renderArmyBuilder();
+      updateBuilderBudget();
+
+      switchScreen('screenArmyBuilder');
+    }
+
+    function backToFactionSelect() {
+      switchScreen('screenFactionSelect');
+    }
+
+    /* ---------------- SCREEN 2: ARMY BUILDER LOGIC ---------------- */
+    function renderArmyBuilder() {
+      const units = [...UNIT_DB[appState.selectedFactionKey]];
+      // Sort highest to lowest point value
+      units.sort((a, b) => b.cost - a.cost);
+
+      const listEl = document.getElementById('builderUnitsList');
+      listEl.innerHTML = units.map(u => `
+        <div class="builder-unit-card">
+          <div class="builder-card-left">
+            <div class="builder-portrait-box">
+              ${getPortraitHTML(u)}
+            </div>
+            <div class="builder-unit-details">
+              <h4>${u.name}</h4>
+              <div class="unit-role">${u.subtitle}</div>
+              <div class="unit-stats-summary">Move ${u.move} • ${u.hp} HP • Def ${u.def} (${u.save} Sv)</div>
+            </div>
+          </div>
+          <div class="builder-card-right">
+            <div class="unit-cost-tag">${u.cost} PTS</div>
+            <div class="builder-count-controls">
+              <button class="btn-count-adjust remove" onclick="adjustUnitCount('${u.id}', -1)">-</button>
+              <span class="selected-unit-count" id="count_${u.id}">0</span>
+              <button class="btn-count-adjust add" onclick="adjustUnitCount('${u.id}', 1)">+</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      updateUnitCountDisplays();
+    }
+
+    function adjustUnitCount(unitId, delta) {
+      const unit = UNIT_DB[appState.selectedFactionKey].find(u => u.id === unitId);
+      const currentPts = appState.draftRoster.reduce((sum, item) => sum + item.cost, 0);
+
+      if (delta > 0) {
+        if (currentPts + unit.cost > appState.pointBudget) {
+          alert(`Cannot add ${unit.name}! That would exceed your ${appState.pointBudget} point budget.`);
+          return;
+        }
+        // Clone instance with unique runtime ID
+        const inst = JSON.parse(JSON.stringify(unit));
+        inst.instId = 'u_' + Math.random().toString(36).substr(2, 9);
+        inst.currentHp = unit.hp;
+        inst.isExhausted = false;
+        inst.hasAim = false;
+        inst.hasOverwatch = false;
+        inst.isDead = false;
+        appState.draftRoster.push(inst);
+      } else {
+        const idx = appState.draftRoster.findIndex(item => item.id === unitId);
+        if (idx !== -1) {
+          appState.draftRoster.splice(idx, 1);
+        }
+      }
+
+      updateBuilderBudget();
+      updateUnitCountDisplays();
+    }
+
+    function updateUnitCountDisplays() {
+      (UNIT_DB[appState.selectedFactionKey] || []).forEach(u => {
+        const el = document.getElementById(`count_${u.id}`);
+        if (el) {
+          const count = appState.draftRoster.filter(item => item.id === u.id).length;
+          el.innerText = count;
+        }
+      });
+    }
+
+    function updateBuilderBudget() {
+      const totalPts = appState.draftRoster.reduce((sum, item) => sum + item.cost, 0);
+      document.getElementById('builderPtsDisplay').innerText = `${totalPts} / ${appState.pointBudget} PTS`;
+
+      const deployBtn = document.getElementById('btnDeployArmy');
+      deployBtn.disabled = (appState.draftRoster.length === 0 || totalPts > appState.pointBudget);
+    }
+
+    function deployArmyToGameplay() {
+      appState.deployedRoster = JSON.parse(JSON.stringify(appState.draftRoster));
+      appState.victoryPoints = 0;
+      appState.armedTool = null;
+
+      // Apply Faction Theme
+      const gpScreen = document.getElementById('screenGameplay');
+      gpScreen.className = `screen-view active theme-${appState.selectedFactionKey}`;
+      document.getElementById('gameplayFactionTitle').innerText = `${FACTION_DATA[appState.selectedFactionKey].name.toUpperCase()} • ${appState.pointBudget} PTS`;
+      document.getElementById('gameplayVP').innerText = '0';
+
+      disarmTool();
+      renderGameplayRoster();
+      switchScreen('screenGameplay');
+    }
+
+    function confirmExitToBuilder() {
+      if (confirm("Return to Army Builder? Current match state will be lost.")) {
+        switchScreen('screenArmyBuilder');
+      }
+    }
+
+    /* ---------------- SCREEN 3: GAMEPLAY TRACKER LOGIC ---------------- */
+    function renderGameplayRoster() {
+      const grid = document.getElementById('gameplayRosterGrid');
+      grid.innerHTML = appState.deployedRoster.map((u, idx) => {
+        const hpPct = Math.max(0, Math.min(100, (u.currentHp / u.hp) * 100));
+        const exhaustedClass = u.isExhausted ? 'exhausted' : '';
+        const deadClass = u.isDead ? 'dead' : '';
+
+        return `
+          <div class="roster-live-card ${exhaustedClass} ${deadClass}" 
+               id="card_${u.instId}"
+               onclick="handleCardClick(${idx})" 
+               oncontextmenu="handleLongPress(event, ${idx})">
+            
+            <div class="live-card-header">
+              <div class="live-portrait-thumb">
+                ${getPortraitHTML(u)}
+              </div>
+              <div class="live-card-info">
+                <div class="live-card-name">${u.name}</div>
+                <div class="live-card-role">${u.cost} PTS • ${u.subtitle}</div>
+              </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="live-stats-row">
+              <div class="live-stat-pill"><div class="lbl">MOVE</div><div class="val">${u.move}</div></div>
+              <div class="live-stat-pill"><div class="lbl">DEFENSE</div><div class="val">${u.def} (${u.save})</div></div>
+              <div class="live-stat-pill"><div class="lbl">MELEE</div><div class="val">${u.melee.split(' ')[0]}</div></div>
+              <div class="live-stat-pill"><div class="lbl">RANGED</div><div class="val">${u.ranged.split(' ')[0]}</div></div>
+            </div>
+
+            <!-- HP Bar -->
+            <div class="live-hp-container">
+              <div class="live-hp-fill" style="width: ${hpPct}%;"></div>
+              <span class="live-hp-text">${u.currentHp} / ${u.hp} HP</span>
+            </div>
+
+            <!-- Active Tokens Area -->
+            <div class="live-applied-tokens">
+              ${u.isDead ? '<span class="token-chip dead">💀 DEAD</span>' : ''}
+              ${u.isExhausted && !u.isDead ? `<span class="token-chip exhausted" onclick="event.stopPropagation(); removeToken(${idx}, 'isExhausted')">⏳ EXHAUSTED <span class="del-x">✕</span></span>` : ''}
+              ${u.hasAim && !u.isDead ? `<span class="token-chip aim" onclick="event.stopPropagation(); removeToken(${idx}, 'hasAim')">🎯 AIM <span class="del-x">✕</span></span>` : ''}
+              ${u.hasOverwatch && !u.isDead ? `<span class="token-chip overwatch" onclick="event.stopPropagation(); removeToken(${idx}, 'hasOverwatch')">🛡️ OVERWATCH <span class="del-x">✕</span></span>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      attachLongPressHandlers();
+    }
+
+    /* Long-Press Support for Touch Tablets */
+    function attachLongPressHandlers() {
+      appState.deployedRoster.forEach((u, idx) => {
+        const el = document.getElementById(`card_${u.instId}`);
+        if (!el) return;
+        let timer = null;
+
+        el.addEventListener('touchstart', (e) => {
+          timer = setTimeout(() => {
+            openStatcardModal(idx);
+          }, 450);
+        });
+        el.addEventListener('touchend', () => clearTimeout(timer));
+        el.addEventListener('touchmove', () => clearTimeout(timer));
+      });
+    }
+
+    function handleLongPress(e, idx) {
+      e.preventDefault();
+      openStatcardModal(idx);
+    }
+
+    /* Tool Arming & Marker Application */
+    function armTool(toolName) {
+      if (appState.armedTool === toolName) {
+        disarmTool();
+        return;
+      }
+      appState.armedTool = toolName;
+      
+      // Update Button Highlight Classes
+      ['aim', 'overwatch', 'exhaust', 'wound', 'heal'].forEach(t => {
+        const btn = document.getElementById(`tool${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        if (btn) btn.className = `marker-tool-btn ${appState.armedTool === t ? 'active-' + t : ''}`;
+      });
+
+      const banner = document.getElementById('armedToolBanner');
+      const text = document.getElementById('armedToolText');
+      banner.classList.add('active');
+      text.innerText = `TOOL ARMED [${toolName.toUpperCase()}]: Tap on any unit card below to apply.`;
+    }
+
+    function disarmTool() {
+      appState.armedTool = null;
+      ['aim', 'overwatch', 'exhaust', 'wound', 'heal'].forEach(t => {
+        const btn = document.getElementById(`tool${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        if (btn) btn.className = 'marker-tool-btn';
+      });
+      document.getElementById('armedToolBanner').classList.remove('active');
+    }
+
+    function handleCardClick(unitIdx) {
+      const unit = appState.deployedRoster[unitIdx];
+      if (!unit) return;
+
+      if (!appState.armedTool) {
+        // If no tool is armed, tap opens the Full Statcard Modal!
+        openStatcardModal(unitIdx);
+        return;
+      }
+
+      // Apply the armed tool effect
+      if (appState.armedTool === 'aim') {
+        unit.hasAim = !unit.hasAim;
+      } else if (appState.armedTool === 'overwatch') {
+        unit.hasOverwatch = !unit.hasOverwatch;
+      } else if (appState.armedTool === 'exhaust') {
+        unit.isExhausted = !unit.isExhausted;
+      } else if (appState.armedTool === 'wound') {
+        unit.currentHp = Math.max(0, unit.currentHp - 1);
+        unit.isDead = (unit.currentHp === 0);
+        if (unit.isDead) unit.isExhausted = true;
+      } else if (appState.armedTool === 'heal') {
+        unit.currentHp = Math.min(unit.hp, unit.currentHp + 1);
+        if (unit.currentHp > 0) unit.isDead = false;
+      }
+
+      renderGameplayRoster();
+    }
+
+    function removeToken(unitIdx, tokenProp) {
+      const unit = appState.deployedRoster[unitIdx];
+      if (unit) {
+        unit[tokenProp] = false;
+        renderGameplayRoster();
+      }
+    }
+
+    function resetTurnExhaustion() {
+      appState.deployedRoster.forEach(u => {
+        if (!u.isDead) {
+          u.isExhausted = false;
+        }
+      });
+      renderGameplayRoster();
+    }
+
+    function changeVP(delta) {
+      appState.victoryPoints = Math.max(0, appState.victoryPoints + delta);
+      document.getElementById('gameplayVP').innerText = appState.victoryPoints;
+    }
+
+    /* ---------------- STATCARD INSPECTION MODAL ---------------- */
+    function openStatcardModal(unitIdx) {
+      const unit = appState.deployedRoster[unitIdx];
+      const box = document.getElementById('statcardModalContent');
+
+      box.innerHTML = `
+        <div class="modal-header-row">
+          <div>
+            <h2 style="font-size: 18px; color: #fff;">${unit.name}</h2>
+            <span style="font-size: 12px; color: var(--gold); font-weight: bold;">${unit.cost} PTS • ${unit.subtitle}</span>
+          </div>
+          <button class="btn-close-modal" onclick="closeModal('modalStatcard')">✕</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; text-align: center;">
+          <div class="skill-item"><div style="color: var(--gold); font-size: 10px; font-weight: bold;">MOVE</div><div style="font-size: 15px; font-weight: 900; color: #fff;">${unit.move}</div></div>
+          <div class="skill-item"><div style="color: var(--gold); font-size: 10px; font-weight: bold;">HP</div><div style="font-size: 15px; font-weight: 900; color: #fff;">${unit.currentHp}/${unit.hp}</div></div>
+          <div class="skill-item"><div style="color: var(--gold); font-size: 10px; font-weight: bold;">DEFENSE</div><div style="font-size: 15px; font-weight: 900; color: #fff;">${unit.def}</div></div>
+          <div class="skill-item"><div style="color: var(--gold); font-size: 10px; font-weight: bold;">SAVE</div><div style="font-size: 15px; font-weight: 900; color: #fff;">${unit.save}</div></div>
+        </div>
+
+        <div style="font-size: 12px; font-weight: 800; color: var(--gold); margin-top: 4px;">⚔️ COMBAT WEAPONS</div>
+        <div class="weapon-table-box">
+          ${unit.weapons.map(w => `
+            <div class="weapon-entry">
+              <div class="weapon-head"><span>${w.name}</span><span>${w.range} • ${w.dice}</span></div>
+              <div class="weapon-sub">${w.traits}</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div style="font-size: 12px; font-weight: 800; color: var(--gold); margin-top: 4px;">📜 SPECIAL ABILITIES & TRAITS</div>
+        ${unit.rules.map(r => `
+          <div class="rule-entry"><strong>✦ ${r.title}:</strong> ${r.text}</div>
+        `).join('')}
+
+        <button class="btn-confirm-faction" style="margin-top: 6px;" onclick="closeModal('modalStatcard')">✓ CLOSE CARD</button>
+      `;
+
+      openModal('modalStatcard');
+    }
+
+    /* ---------------- MODAL HELPERS ---------------- */
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+    function openRulesModal() {
+      openModal('modalRules');
+    }
+
+    function switchScreen(id) {
+      document.querySelectorAll('.screen-view').forEach(el => el.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+  </script>
+</body>
+</html>
