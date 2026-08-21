@@ -471,50 +471,63 @@
       display: flex;
       flex-direction: row;
       align-items: stretch;
-      justify-content: space-between;
       overflow: hidden;
-      min-height: 105px;
+      min-height: 96px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      box-sizing: border-box;
     }
 
     .builder-portrait-box {
-      flex: 0 0 95px;
-      width: 95px;
-      background: #0d0d12;
+      flex: 0 0 85px;
+      width: 85px;
+      min-width: 85px;
+      max-width: 85px;
+      height: 100%;
+      min-height: 96px;
+      background: #0a0a10;
       border-right: 2px solid var(--gold);
+      overflow: hidden;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-      position: relative;
+      flex-shrink: 0;
     }
     .builder-portrait-box img {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center 20%;
       display: block;
     }
     .builder-portrait-box svg {
-      width: 75%;
-      height: 75%;
+      width: 65%;
+      height: 65%;
+      object-fit: contain;
     }
 
     .builder-card-body {
-      flex: 1;
+      flex: 1 1 auto;
+      min-width: 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 14px;
-      gap: 10px;
+      padding: 8px 12px;
+      gap: 8px;
       overflow: hidden;
+      box-sizing: border-box;
     }
 
     .builder-unit-details {
-      flex: 1;
+      flex: 1 1 auto;
+      min-width: 0;
       overflow: hidden;
     }
     .builder-unit-details h4 {
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 800;
       color: #fff;
       margin-bottom: 2px;
@@ -526,17 +539,23 @@
       font-size: 10.5px;
       color: var(--gold);
       font-weight: 600;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .builder-unit-details .unit-stats-summary {
-      font-size: 10.5px;
+      font-size: 10px;
       color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .builder-card-right {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex-shrink: 0;
     }
 
@@ -776,7 +795,7 @@
     .roster-live-card {
       background: var(--f-card, var(--card-bg));
       border: 2px solid var(--f-border, var(--border-dark));
-      border-radius: 14px;
+      border-radius: 12px;
       padding: 0;
       display: flex;
       flex-direction: row;
@@ -784,13 +803,14 @@
       position: relative;
       cursor: pointer;
       transition: transform 0.15s ease, border-color 0.15s ease;
-      min-height: 135px;
+      min-height: 130px;
+      height: 135px;
       overflow: hidden;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+      box-sizing: border-box;
     }
     .roster-live-card:hover {
       border-color: var(--f-accent, var(--gold));
-      transform: translateY(-2px);
     }
     .roster-live-card:active {
       transform: scale(0.98);
@@ -809,38 +829,49 @@
       pointer-events: none;
     }
 
-    /* Full-Height Left Portrait Column */
+    /* Full-Height Left Portrait Column with Strict Image Containment */
     .live-card-portrait-full {
-      flex: 0 0 100px;
-      width: 100px;
+      flex: 0 0 92px;
+      width: 92px;
+      min-width: 92px;
+      max-width: 92px;
+      height: 100%;
       background: #09090e;
       border-right: 2px solid var(--f-border, var(--gold));
+      overflow: hidden;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-      position: relative;
+      flex-shrink: 0;
     }
     .live-card-portrait-full img {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center 15%;
       display: block;
     }
     .live-card-portrait-full svg {
-      width: 75%;
-      height: 75%;
+      width: 65%;
+      height: 65%;
+      object-fit: contain;
     }
 
     /* Right Column: All Content, Stats, HP, Tokens */
     .live-card-content-right {
-      flex: 1;
-      padding: 8px 10px;
+      flex: 1 1 auto;
+      min-width: 0;
+      padding: 6px 10px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 5px;
+      gap: 3px;
       overflow: hidden;
+      box-sizing: border-box;
     }
 
     .live-card-header-row {
@@ -1412,8 +1443,8 @@
 
     function getPortraitHTML(unit) {
       if (unit.img) {
-        return `<img src="${unit.img}" alt="${unit.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <div style="display:none; width:100%; height:100%;">${getGlyphSVG(unit.glyph)}</div>`;
+        return `<img src="${unit.img}" alt="${unit.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div style="display:none; width:100%; height:100%; align-items:center; justify-content:center;">${getGlyphSVG(unit.glyph)}</div>`;
       }
       return getGlyphSVG(unit.glyph);
     }
